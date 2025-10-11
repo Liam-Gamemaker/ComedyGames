@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alphabet Word Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #5a67d8;
+            --secondary-color: #764ba2;
+            --danger-color: #e53e3e;
+            --success-color: #38a169;
+            --light-bg: rgba(255, 255, 255, 0.95);
+            --dark-bg: rgba(30, 30, 50, 0.95);
+            --light-text: #333;
+            --dark-text: #e2e8f0;
+            --player-bg: #e2e8f0;
+            --eliminated-bg: #fed7d7;
+            --accent-1: #ff9a9e;
+            --accent-2: #fad0c4;
+            --accent-3: #a1c4fd;
+            --accent-4: #c2e9fb;
+            --accent-5: #ffecd2;
+            --accent-6: #fcb69f;
+            --neon-purple: #9d00ff;
+            --neon-blue: #00d9ff;
+            --neon-pink: #ff006e;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--dark-text);
+            transition: background 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            background-color: var(--dark-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 900px;
+            padding: 30px;
+            text-align: center;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-theme .container {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        h1 {
+            color: #9f7aea;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            transition: color 0.5s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+
+        body.light-theme h1 {
+            color: var(--primary-color);
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #c53030 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #2f855a 100%);
+        }
+
+        .btn-neon {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-blue) 100%);
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.7);
+        }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 25px rgba(157, 0, 255, 0.9);
+        }
+
+        .player-count, .initial-time, .time-reduction, .minimum-time {
+            margin: 20px 0;
+        }
+
+        .player-count select, .initial-time input, .time-reduction input, .minimum-time input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            background-color: rgba(30, 30, 50, 0.8);
+            color: var(--dark-text);
+            transition: border-color 0.5s ease;
+        }
+
+        body.light-theme .player-count select, 
+        body.light-theme .initial-time input, 
+        body.light-theme .time-reduction input,
+        body.light-theme .minimum-time input {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--light-text);
+        }
+
+        .category-select, .theme-select {
+            margin: 20px 0;
+        }
+
+        .category-select select, .theme-select select {
+            padding: 10px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            background-color: rgba(30, 30, 50, 0.8);
+            color: var(--dark-text);
+            width: 100%;
+            max-width: 300px;
+            transition: border-color 0.5s ease, background-color 0.5s ease;
+        }
+
+        body.light-theme .category-select select, 
+        body.light-theme .theme-select select {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--light-text);
+        }
+
+        .timer-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .timer {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #fc8181;
+            margin: 20px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: color 0.5s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        body.light-theme .timer {
+            color: var(--danger-color);
+        }
+
+        .timer.warning {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #38a169, #68d391);
+            border-radius: 5px;
+            transition: width 0.1s linear;
+        }
+
+        .alphabet-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .letter {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .letter:hover:not(.used)::before {
+            opacity: 1;
+        }
+
+        .letter:hover:not(.used) {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .letter.used {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: #718096;
+            cursor: not-allowed;
+            transform: scale(0.85);
+            box-shadow: none;
+        }
+
+        body.light-theme .letter.used {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+            color: #a0aec0;
+        }
+
+        .current-player {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: #9f7aea;
+            font-weight: bold;
+            transition: color 0.5s ease;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(159, 122, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            display: inline-block;
+        }
+
+        body.light-theme .current-player {
+            color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(90, 103, 216, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .players-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .player {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            border-radius: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-theme .player {
+            background: linear-gradient(135deg, var(--player-bg) 0%, #cbd5e0 100%);
+        }
+
+        .player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .player:hover::before {
+            transform: translateX(100%);
+        }
+
+        .player.eliminated {
+            background: linear-gradient(135deg, #742a2a 0%, #9b2c2c 100%);
+            color: #fc8181;
+            text-decoration: line-through;
+            transform: scale(0.95);
+        }
+
+        body.light-theme .player.eliminated {
+            background: linear-gradient(135deg, var(--eliminated-bg) 0%, #feb2b2 100%);
+            color: var(--danger-color);
+        }
+
+        .eliminate-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .eliminate-btn:hover {
+            background-color: #c53030;
+            transform: scale(1.05);
+        }
+
+        .winner {
+            font-size: 2.5rem;
+            color: var(--success-color);
+            margin: 25px 0;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .winners-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .winner-badge {
+            background: linear-gradient(135deg, var(--success-color) 0%, #2f855a 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: bounce 1s infinite alternate;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winner-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .category-display {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: #9f7aea;
+            font-weight: bold;
+            transition: color 0.5s ease;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(159, 122, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            display: inline-block;
+        }
+
+        body.light-theme .category-display {
+            color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(90, 103, 216, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.7) 0%, rgba(74, 85, 104, 0.7) 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: left;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .instructions {
+            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
+        }
+
+        .instructions h3 {
+            color: #9f7aea;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            transition: color 0.5s ease;
+        }
+
+        body.light-theme .instructions h3 {
+            color: var(--primary-color);
+        }
+
+        .instructions ul {
+            padding-left: 25px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .used-letters {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.7) 0%, rgba(74, 85, 104, 0.7) 100%);
+            border-radius: 15px;
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .used-letters {
+            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
+        }
+
+        .used-letters h3 {
+            margin-bottom: 10px;
+            color: #9f7aea;
+            transition: color 0.5s ease;
+        }
+
+        body.light-theme .used-letters h3 {
+            color: var(--primary-color);
+        }
+
+        .used-letters-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .used-letter {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .settings-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.7) 0%, rgba(74, 85, 104, 0.7) 100%);
+            border-radius: 15px;
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .settings-section {
+            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
+        }
+
+        .settings-section h3 {
+            margin-bottom: 15px;
+            color: #9f7aea;
+            transition: color 0.5s ease;
+        }
+
+        body.light-theme .settings-section h3 {
+            color: var(--primary-color);
+        }
+
+        .player-name-input {
+            margin: 10px 0;
+        }
+
+        .player-name-input input {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            background-color: rgba(30, 30, 50, 0.8);
+            color: var(--dark-text);
+            width: 100%;
+            max-width: 300px;
+            transition: border-color 0.5s ease, background-color 0.5s ease;
+        }
+
+        body.light-theme .player-name-input input {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--light-text);
+        }
+
+        .custom-category {
+            margin: 15px 0;
+        }
+
+        .custom-category input {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            background-color: rgba(30, 30, 50, 0.8);
+            color: var(--dark-text);
+            width: 100%;
+            max-width: 300px;
+            transition: border-color 0.5s ease, background-color 0.5s ease;
+        }
+
+        body.light-theme .custom-category input {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--light-text);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 30, 50, 0.3);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(30, 30, 50, 0.5);
+        }
+
+        body.light-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        body.light-theme .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.7) 0%, rgba(74, 85, 104, 0.7) 100%);
+            padding: 15px;
+            border-radius: 15px;
+            width: 45%;
+            margin: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.5s ease, transform 0.3s ease;
+        }
+
+        body.light-theme .stat-box {
+            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-box h4 {
+            color: #9f7aea;
+            margin-bottom: 10px;
+            transition: color 0.5s ease;
+        }
+
+        body.light-theme .stat-box h4 {
+            color: var(--primary-color);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .pass-button {
+            background: linear-gradient(135deg, var(--accent-5) 0%, var(--accent-6) 100%);
+            color: #744210;
+            margin-top: 15px;
+        }
+
+        .pass-button:hover {
+            background: linear-gradient(135deg, var(--accent-6) 0%, var(--accent-5) 100%);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: var(--accent-1);
+            border-radius: 50%;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(2) {
+            top: 70%;
+            left: 80%;
+            width: 120px;
+            height: 120px;
+            background: var(--accent-3);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-duration: 30s;
+            animation-direction: reverse;
+        }
+
+        .shape:nth-child(3) {
+            top: 40%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            background: var(--accent-5);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation-duration: 35s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .neon-border {
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 10px var(--neon-purple), inset 0 0 10px var(--neon-purple);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0.7;
+            animation: neon-glow 2s infinite alternate;
+        }
+
+        @keyframes neon-glow {
+            0% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0.9;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .letter {
+                width: 45px;
+                height: 45px;
+                font-size: 1.4rem;
+            }
+
+            .timer {
+                font-size: 2.8rem;
+            }
+
+            .current-player, .category-display {
+                font-size: 1.5rem;
+            }
+
+            .player {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .eliminate-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+
+            .winner {
+                font-size: 2rem;
+            }
+
+            .instructions {
+                padding: 15px;
+            }
+
+            .instructions h3 {
+                font-size: 1.2rem;
+            }
+
+            .instructions li {
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <button class="theme-toggle" id="themeToggle">☀️</button>
+    
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen active">
+            <h1>Alphabet Word Challenge</h1>
+            <div class="neon-border">
+                <div class="instructions">
+                    <h3>How to Play:</h3>
+                    <ul>
+                        <li>Players take turns saying words from a given category</li>
+                        <li>Each word must begin with a specific letter of the alphabet</li>
+                        <li>After saying a word, press/touch that letter on the screen</li>
+                        <li>Once a letter is used, it becomes inactive</li>
+                        <li>The timer starts long and decreases slightly with each letter pressed</li>
+                        <li>If time runs out, the player is eliminated</li>
+                        <li>Players can also be manually eliminated by pressing the eliminate button</li>
+                        <li>All remaining players win when the game ends!</li>
+                        <li>If all letters are used, the game is completed!</li>
+                    </ul>
+                </div>
+            </div>
+            <p>Select your device type:</p>
+            <button class="btn btn-neon" onclick="selectDevice('pc')">PC/Desktop</button>
+            <button class="btn btn-neon" onclick="selectDevice('mobile')">Mobile/Tablet</button>
+        </div>
+
+        <!-- Player Setup Screen -->
+        <div id="playerSetupScreen" class="screen">
+            <h1>Player Setup</h1>
+            
+            <div class="settings-section">
+                <h3>Game Settings</h3>
+                <div class="player-count">
+                    <label for="playerCount">Number of Players:</label>
+                    <select id="playerCount">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4" selected>4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                    </select>
+                </div>
+                <div class="initial-time">
+                    <label for="initialTime">Initial Time (seconds):</label>
+                    <input type="number" id="initialTime" min="10" max="60" value="10">
+                </div>
+                <div class="time-reduction">
+                    <label for="timeReduction">Time Reduction (seconds):</label>
+                    <input type="number" id="timeReduction" min="0.1" max="2" step="0.1" value="0.2">
+                </div>
+                <div class="minimum-time">
+                    <label for="minimumTime">Minimum Time (seconds):</label>
+                    <input type="number" id="minimumTime" min="1" max="10" value="5">
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>Player Names</h3>
+                <div id="playerNamesContainer"></div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>Category Selection</h3>
+                <div class="category-select">
+                    <label for="categorySelect">Select a Category:</label>
+                    <select id="categorySelect">
+                        <option value="animals">Animals</option>
+                        <option value="countries">Countries</option>
+                        <option value="foods">Foods</option>
+                        <option value="movies">Movies</option>
+                        <option value="sports">Sports</option>
+                        <option value="brands">Brands</option>
+                        <option value="cities">Cities</option>
+                        <option value="books">Books</option>
+                        <option value="random">Random Category</option>
+                        <option value="custom">Custom Category</option>
+                    </select>
+                </div>
+                <div class="custom-category" id="customCategoryContainer" style="display: none;">
+                    <label for="customCategory">Enter Custom Category:</label>
+                    <input type="text" id="customCategory" placeholder="Enter your custom category">
+                </div>
+            </div>
+            
+            <div class="theme-select">
+                <label for="themeSelect">Theme:</label>
+                <select id="themeSelect">
+                    <option value="dark" selected>Dark</option>
+                    <option value="light">Light</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-neon" onclick="startGame()">Start Game</button>
+            <button class="btn btn-secondary" onclick="goBackToStart()">Back</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <h1>Alphabet Word Challenge</h1>
+            <div class="category-display" id="categoryDisplay"></div>
+            <div class="current-player" id="currentPlayer"></div>
+            
+            <div class="game-stats">
+                <div class="stat-box">
+                    <h4>Letters Used</h4>
+                    <div class="stat-value" id="lettersUsedCount">0</div>
+                </div>
+                <div class="stat-box">
+                    <h4>Players Remaining</h4>
+                    <div class="stat-value" id="playersRemainingCount">0</div>
+                </div>
+            </div>
+            
+            <div class="timer-container">
+                <div class="timer" id="timer">10</div>
+                <div class="timer-bar">
+                    <div class="timer-progress" id="timerProgress"></div>
+                </div>
+            </div>
+            
+            <div class="alphabet-container" id="alphabetContainer"></div>
+            
+            <button class="btn pass-button" id="passButton" onclick="passLetter()">Pass Letter</button>
+            
+            <div class="used-letters">
+                <h3>Used Letters</h3>
+                <div class="used-letters-list" id="usedLettersList"></div>
+            </div>
+            
+            <div class="players-list" id="playersList"></div>
+            <button class="btn btn-danger" onclick="endGame()">End Game</button>
+        </div>
+
+        <!-- Winner Screen -->
+        <div id="winnerScreen" class="screen">
+            <h1>Game Over</h1>
+            <div class="winner" id="winnerMessage"></div>
+            <div class="winners-list" id="winnersList"></div>
+            <div class="game-stats">
+                <div class="stat-box">
+                    <h4>Total Letters Used</h4>
+                    <div class="stat-value" id="totalLettersUsed">0</div>
+                </div>
+                <div class="stat-box">
+                    <h4>Players Eliminated</h4>
+                    <div class="stat-value" id="playersEliminated">0</div>
+                </div>
+            </div>
+            <button class="btn btn-neon" onclick="resetGame()">Play Again</button>
+            <button class="btn btn-secondary" onclick="goBackToStart()">Main Menu</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state variables
+        let deviceType = '';
+        let players = [];
+        let currentPlayerIndex = 0;
+        let category = '';
+        let timeLimit = 10;
+        let timeRemaining = timeLimit;
+        let timerInterval = null;
+        let usedLetters = [];
+        let gameActive = false;
+        let timeReductionAmount = 0.2;
+        let minimumTime = 5;
+        let totalLettersUsed = 0;
+        let playersEliminated = 0;
+        let isDarkTheme = true;
+        let passCount = 0;
+        let maxPasses = 3;
+
+        // Initialize the alphabet
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        
+        // Available categories for random selection
+        const availableCategories = ['animals', 'countries', 'foods', 'movies', 'sports', 'brands', 'cities', 'books'];
+
+        // Select device type
+        function selectDevice(type) {
+            deviceType = type;
+            showScreen('playerSetupScreen');
+            initializePlayerNames();
+            setupEventListeners();
+        }
+
+        // Show specific screen
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Go back to start screen
+        function goBackToStart() {
+            resetGame();
+            showScreen('startScreen');
+        }
+
+        // Initialize player names inputs
+        function initializePlayerNames() {
+            const playerCount = parseInt(document.getElementById('playerCount').value);
+            const container = document.getElementById('playerNamesContainer');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= playerCount; i++) {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'player-name-input';
+                playerDiv.innerHTML = `
+                    <label for="player${i}Name">Player ${i} Name:</label>
+                    <input type="text" id="player${i}Name" value="Player ${i}" maxlength="15">
+                `;
+                container.appendChild(playerDiv);
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Player count change
+            document.getElementById('playerCount').addEventListener('change', initializePlayerNames);
+            
+            // Category change
+            document.getElementById('categorySelect').addEventListener('change', function() {
+                const customCategoryContainer = document.getElementById('customCategoryContainer');
+                if (this.value === 'custom') {
+                    customCategoryContainer.style.display = 'block';
+                } else {
+                    customCategoryContainer.style.display = 'none';
+                }
+            });
+            
+            // Theme change
+            document.getElementById('themeSelect').addEventListener('change', function() {
+                if (this.value === 'light') {
+                    document.body.classList.add('light-theme');
+                    isDarkTheme = false;
+                    document.getElementById('themeToggle').textContent = '🌙';
+                } else {
+                    document.body.classList.remove('light-theme');
+                    isDarkTheme = true;
+                    document.getElementById('themeToggle').textContent = '☀️';
+                }
+            });
+            
+            // Theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', function() {
+                if (isDarkTheme) {
+                    document.body.classList.add('light-theme');
+                    isDarkTheme = false;
+                    this.textContent = '🌙';
+                    document.getElementById('themeSelect').value = 'light';
+                } else {
+                    document.body.classList.remove('light-theme');
+                    isDarkTheme = true;
+                    this.textContent = '☀️';
+                    document.getElementById('themeSelect').value = 'dark';
+                }
+            });
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = confetti.style.width;
+                    confetti.style.opacity = Math.random() * 0.7 + 0.3;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 30);
+            }
+        }
+
+        // Start the game
+        function startGame() {
+            const playerCount = parseInt(document.getElementById('playerCount').value);
+            const categorySelect = document.getElementById('categorySelect').value;
+            const customCategory = document.getElementById('customCategory').value.trim();
+            
+            if (playerCount < 2 || playerCount > 26) {
+                alert('Please select a number between 2 and 26');
+                return;
+            }
+            
+            // Set category
+            if (categorySelect === 'random') {
+                // Select a random category
+                category = availableCategories[Math.floor(Math.random() * availableCategories.length)];
+            } else if (categorySelect === 'custom' && customCategory) {
+                category = customCategory;
+            } else if (categorySelect !== 'custom' && categorySelect !== 'random') {
+                category = categorySelect;
+            } else {
+                alert('Please enter a custom category name');
+                return;
+            }
+            
+            // Get time settings
+            timeLimit = parseInt(document.getElementById('initialTime').value);
+            timeReductionAmount = parseFloat(document.getElementById('timeReduction').value);
+            minimumTime = parseInt(document.getElementById('minimumTime').value);
+            
+            if (timeLimit < 10 || timeLimit > 60) {
+                alert('Please enter an initial time between 10 and 60 seconds');
+                return;
+            }
+            
+            if (timeReductionAmount < 0.1 || timeReductionAmount > 2) {
+                alert('Please enter a time reduction between 0.1 and 2 seconds');
+                return;
+            }
+            
+            if (minimumTime < 1 || minimumTime > 10) {
+                alert('Please enter a minimum time between 1 and 10 seconds');
+                return;
+            }
+            
+            // Initialize players with custom names
+            players = [];
+            for (let i = 1; i <= playerCount; i++) {
+                const playerNameInput = document.getElementById(`player${i}Name`);
+                const playerName = playerNameInput ? playerNameInput.value.trim() : `Player ${i}`;
+                players.push({
+                    id: i,
+                    name: playerName || `Player ${i}`,
+                    eliminated: false,
+                    passesLeft: maxPasses
+                });
+            }
+            
+            // Reset game state
+            currentPlayerIndex = 0;
+            usedLetters = [];
+            timeRemaining = timeLimit;
+            gameActive = true;
+            totalLettersUsed = 0;
+            playersEliminated = 0;
+            passCount = 0;
+            
+            // Setup game screen
+            document.getElementById('categoryDisplay').textContent = `Category: ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+            updatePlayersList();
+            updateGameStats();
+            createAlphabet();
+            updateCurrentPlayer();
+            startTimer();
+            
+            showScreen('gameScreen');
+        }
+
+        // Create alphabet display in a grid
+        function createAlphabet() {
+            const container = document.getElementById('alphabetContainer');
+            container.innerHTML = '';
+            
+            alphabet.forEach((letter) => {
+                const letterElement = document.createElement('div');
+                letterElement.classList.add('letter');
+                letterElement.textContent = letter;
+                letterElement.id = `letter-${letter}`;
+                
+                if (deviceType === 'mobile') {
+                    letterElement.addEventListener('touchstart', function(e) {
+                        e.preventDefault();
+                        selectLetter(letter);
+                    });
+                } else {
+                    letterElement.addEventListener('click', function() {
+                        selectLetter(letter);
+                    });
+                }
+                
+                container.appendChild(letterElement);
+            });
+        }
+
+        // Select a letter
+        function selectLetter(letter) {
+            if (!gameActive || usedLetters.includes(letter)) return;
+            
+            // Mark letter as used
+            usedLetters.push(letter);
+            const letterElement = document.getElementById(`letter-${letter}`);
+            letterElement.classList.add('used');
+            
+            // Update used letters display
+            updateUsedLetters();
+            
+            // Update total letters used
+            totalLettersUsed++;
+            updateGameStats();
+            
+            // Reset timer by subtracting a fixed amount
+            timeLimit = Math.max(minimumTime, timeLimit - timeReductionAmount);
+            
+            // Check if all letters are used
+            if (usedLetters.length === alphabet.length) {
+                gameComplete();
+                return;
+            }
+            
+            // Move to next player
+            nextTurn();
+        }
+
+        // Pass on a letter
+        function passLetter() {
+            if (!gameActive || players[currentPlayerIndex].passesLeft <= 0) return;
+            
+            // Use a pass
+            players[currentPlayerIndex].passesLeft--;
+            passCount++;
+            
+            // Show feedback
+            const currentPlayer = players[currentPlayerIndex];
+            alert(`${currentPlayer.name} used a pass! ${currentPlayer.passesLeft} passes remaining.`);
+            
+            // Move to next player
+            nextTurn();
+        }
+
+        // Game complete - all letters used
+        function gameComplete() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            
+            // Create confetti effect
+            createConfetti();
+            
+            // Show game complete message
+            document.getElementById('winnerMessage').textContent = 'Game Complete! All letters used!';
+            document.getElementById('totalLettersUsed').textContent = totalLettersUsed;
+            document.getElementById('playersEliminated').textContent = playersEliminated;
+            
+            // Show all remaining players as winners
+            showWinners();
+            
+            showScreen('winnerScreen');
+        }
+
+        // Move to next player's turn
+        function nextTurn() {
+            // Find next active player
+            do {
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+            } while (players[currentPlayerIndex].eliminated);
+            
+            // Update UI
+            updateCurrentPlayer();
+            startTimer();
+        }
+
+        // Update current player display
+        function updateCurrentPlayer() {
+            const currentPlayer = players[currentPlayerIndex];
+            document.getElementById('currentPlayer').textContent = `Current Player: ${currentPlayer.name}`;
+            
+            // Update pass button
+            const passButton = document.getElementById('passButton');
+            if (currentPlayer.passesLeft > 0) {
+                passButton.textContent = `Pass Letter (${currentPlayer.passesLeft} left)`;
+                passButton.style.display = 'inline-block';
+            } else {
+                passButton.style.display = 'none';
+            }
+        }
+
+        // Start the timer for the current player
+        function startTimer() {
+            timeRemaining = timeLimit;
+            updateTimerDisplay();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 3) {
+                    document.getElementById('timer').classList.add('warning');
+                } else {
+                    document.getElementById('timer').classList.remove('warning');
+                }
+                
+                if (timeRemaining <= 0) {
+                    // Time's up - eliminate current player
+                    clearInterval(timerInterval);
+                    eliminatePlayer(currentPlayerIndex);
+                }
+            }, 1000);
+        }
+
+        // Update the timer display
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = timeRemaining.toFixed(1);
+            
+            // Update timer progress bar
+            const progress = (timeRemaining / timeLimit) * 100;
+            document.getElementById('timerProgress').style.width = progress + '%';
+            
+            // Change color based on time remaining
+            const progressBar = document.getElementById('timerProgress');
+            if (progress > 50) {
+                progressBar.style.background = 'linear-gradient(90deg, #38a169, #68d391)';
+            } else if (progress > 20) {
+                progressBar.style.background = 'linear-gradient(90deg, #d69e2e, #f6e05e)';
+            } else {
+                progressBar.style.background = 'linear-gradient(90deg, #e53e3e, #fc8181)';
+            }
+        }
+
+        // Update used letters display
+        function updateUsedLetters() {
+            const container = document.getElementById('usedLettersList');
+            container.innerHTML = '';
+            
+            usedLetters.forEach(letter => {
+                const letterElement = document.createElement('div');
+                letterElement.classList.add('used-letter');
+                letterElement.textContent = letter;
+                container.appendChild(letterElement);
+            });
+        }
+
+        // Update game statistics
+        function updateGameStats() {
+            document.getElementById('lettersUsedCount').textContent = usedLetters.length;
+            document.getElementById('playersRemainingCount').textContent = players.filter(p => !p.eliminated).length;
+        }
+
+        // Eliminate a player
+        function eliminatePlayer(playerIndex) {
+            players[playerIndex].eliminated = true;
+            playersEliminated++;
+            updatePlayersList();
+            updateGameStats();
+            
+            // Check if game is over
+            const activePlayers = players.filter(p => !p.eliminated);
+            if (activePlayers.length === 0) {
+                // All players eliminated
+                gameActive = false;
+                clearInterval(timerInterval);
+                document.getElementById('winnerMessage').textContent = 'No winners! All players eliminated!';
+                document.getElementById('totalLettersUsed').textContent = totalLettersUsed;
+                document.getElementById('playersEliminated').textContent = playersEliminated;
+                document.getElementById('winnersList').innerHTML = '';
+                showScreen('winnerScreen');
+            } else if (activePlayers.length === 1) {
+                // Only one player left - they win!
+                gameActive = false;
+                clearInterval(timerInterval);
+                
+                // Create confetti effect
+                createConfetti();
+                
+                document.getElementById('winnerMessage').textContent = `${activePlayers[0].name} is the last player standing!`;
+                document.getElementById('totalLettersUsed').textContent = totalLettersUsed;
+                document.getElementById('playersEliminated').textContent = playersEliminated;
+                
+                // Show the winner
+                document.getElementById('winnersList').innerHTML = `<div class="winner-badge">${activePlayers[0].name}</div>`;
+                
+                showScreen('winnerScreen');
+            } else {
+                // Move to next player
+                nextTurn();
+            }
+        }
+
+        // Manually eliminate a player
+        function manuallyEliminatePlayer(playerIndex) {
+            if (!gameActive || players[playerIndex].eliminated) return;
+            
+            if (confirm(`Are you sure you want to eliminate ${players[playerIndex].name}?`)) {
+                eliminatePlayer(playerIndex);
+            }
+        }
+
+        // Update the players list display
+        function updatePlayersList() {
+            const container = document.getElementById('playersList');
+            container.innerHTML = '';
+            
+            players.forEach((player, index) => {
+                const playerElement = document.createElement('div');
+                playerElement.classList.add('player');
+                if (player.eliminated) {
+                    playerElement.classList.add('eliminated');
+                }
+                
+                const playerName = document.createElement('span');
+                playerName.textContent = player.name;
+                playerElement.appendChild(playerName);
+                
+                if (!player.eliminated && gameActive) {
+                    const eliminateBtn = document.createElement('button');
+                    eliminateBtn.classList.add('eliminate-btn');
+                    eliminateBtn.textContent = 'Eliminate';
+                    eliminateBtn.setAttribute('data-player-index', index);
+                    
+                    // Use event delegation approach
+                    eliminateBtn.addEventListener('click', function() {
+                        manuallyEliminatePlayer(index);
+                    });
+                    
+                    playerElement.appendChild(eliminateBtn);
+                }
+                
+                container.appendChild(playerElement);
+            });
+        }
+
+        // Show winners on the winner screen
+        function showWinners() {
+            const container = document.getElementById('winnersList');
+            container.innerHTML = '';
+            
+            const winners = players.filter(p => !p.eliminated);
+            
+            if (winners.length === 1) {
+                container.innerHTML = `<div class="winner-badge">${winners[0].name}</div>`;
+            } else if (winners.length > 1) {
+                winners.forEach(winner => {
+                    const winnerBadge = document.createElement('div');
+                    winnerBadge.classList.add('winner-badge');
+                    winnerBadge.textContent = winner.name;
+                    container.appendChild(winnerBadge);
+                });
+            }
+        }
+
+        // End the game with winners
+        function endGameWithWinners() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            
+            // Show game ended message
+            document.getElementById('winnerMessage').textContent = 'Game Ended!';
+            document.getElementById('totalLettersUsed').textContent = totalLettersUsed;
+            document.getElementById('playersEliminated').textContent = playersEliminated;
+            
+            // Show all remaining players as winners
+            showWinners();
+            
+            showScreen('winnerScreen');
+        }
+
+        // End the game prematurely (no winner)
+        function endGame() {
+            endGameWithWinners();
+        }
+
+        // Reset the game to initial state
+        function resetGame() {
+            players = [];
+            currentPlayerIndex = 0;
+            usedLetters = [];
+            timeLimit = 10;
+            timeRemaining = timeLimit;
+            gameActive = false;
+            clearInterval(timerInterval);
+            totalLettersUsed = 0;
+            playersEliminated = 0;
+            passCount = 0;
+            
+            // Reset UI elements
+            document.getElementById('playerCount').value = 4;
+            document.getElementById('initialTime').value = 10;
+            document.getElementById('timeReduction').value = 0.2;
+            document.getElementById('minimumTime').value = 5;
+            document.getElementById('categorySelect').value = 'animals';
+            document.getElementById('customCategory').value = '';
+            document.getElementById('customCategoryContainer').style.display = 'none';
+            document.getElementById('themeSelect').value = isDarkTheme ? 'dark' : 'light';
+            document.getElementById('timer').classList.remove('warning');
+        }
+
+        // Initialize the game when the page loads
+        window.onload = function() {
+            resetGame();
+        };
+    </script>
+</body>
+</html>
