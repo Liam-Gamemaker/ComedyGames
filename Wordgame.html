@@ -45,10 +45,6 @@
             overflow-x: hidden;
         }
 
-        body.light-theme {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
         .container {
             background-color: var(--dark-bg);
             border-radius: 20px;
@@ -60,11 +56,6 @@
             transition: background-color 0.5s ease, color 0.5s ease;
             position: relative;
             overflow: hidden;
-        }
-
-        body.light-theme .container {
-            background-color: var(--light-bg);
-            color: var(--light-text);
         }
 
         .container::before {
@@ -98,10 +89,6 @@
             height: 3px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             border-radius: 3px;
-        }
-
-        body.light-theme h1 {
-            color: var(--primary-color);
         }
 
         .screen {
@@ -197,14 +184,6 @@
             transition: border-color 0.5s ease;
         }
 
-        body.light-theme .player-count select, 
-        body.light-theme .initial-time input, 
-        body.light-theme .time-reduction input,
-        body.light-theme .minimum-time input {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: var(--light-text);
-        }
-
         .category-select, .theme-select {
             margin: 20px 0;
         }
@@ -221,12 +200,6 @@
             transition: border-color 0.5s ease, background-color 0.5s ease;
         }
 
-        body.light-theme .category-select select, 
-        body.light-theme .theme-select select {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: var(--light-text);
-        }
-
         .timer-container {
             position: relative;
             margin: 20px 0;
@@ -241,10 +214,6 @@
             transition: color 0.5s ease;
             position: relative;
             display: inline-block;
-        }
-
-        body.light-theme .timer {
-            color: var(--danger-color);
         }
 
         .timer.warning {
@@ -328,11 +297,6 @@
             box-shadow: none;
         }
 
-        body.light-theme .letter.used {
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-            color: #a0aec0;
-        }
-
         .current-player {
             font-size: 1.8rem;
             margin: 20px 0;
@@ -343,11 +307,6 @@
             border-radius: 50px;
             background: linear-gradient(135deg, rgba(159, 122, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
             display: inline-block;
-        }
-
-        body.light-theme .current-player {
-            color: var(--primary-color);
-            background: linear-gradient(135deg, rgba(90, 103, 216, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
         }
 
         .players-list {
@@ -372,10 +331,6 @@
             overflow: hidden;
         }
 
-        body.light-theme .player {
-            background: linear-gradient(135deg, var(--player-bg) 0%, #cbd5e0 100%);
-        }
-
         .player::before {
             content: '';
             position: absolute;
@@ -397,11 +352,6 @@
             color: #fc8181;
             text-decoration: line-through;
             transform: scale(0.95);
-        }
-
-        body.light-theme .player.eliminated {
-            background: linear-gradient(135deg, var(--eliminated-bg) 0%, #feb2b2 100%);
-            color: var(--danger-color);
         }
 
         .eliminate-btn {
@@ -484,11 +434,6 @@
             display: inline-block;
         }
 
-        body.light-theme .category-display {
-            color: var(--primary-color);
-            background: linear-gradient(135deg, rgba(90, 103, 216, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-        }
-
         .instructions {
             background: linear-gradient(135deg, rgba(45, 55, 72, 0.7) 0%, rgba(74, 85, 104, 0.7) 100%);
             padding: 20px;
@@ -499,19 +444,11 @@
             transition: background 0.5s ease;
         }
 
-        body.light-theme .instructions {
-            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
-        }
-
         .instructions h3 {
             color: #9f7aea;
             margin-bottom: 15px;
             font-size: 1.4rem;
             transition: color 0.5s ease;
-        }
-
-        body.light-theme .instructions h3 {
-            color: var(--primary-color);
         }
 
         .instructions ul {
@@ -531,18 +468,10 @@
             transition: background 0.5s ease;
         }
 
-        body.light-theme .used-letters {
-            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
-        }
-
         .used-letters h3 {
             margin-bottom: 10px;
             color: #9f7aea;
             transition: color 0.5s ease;
-        }
-
-        body.light-theme .used-letters h3 {
-            color: var(--primary-color);
         }
 
         .used-letters-list {
@@ -573,18 +502,10 @@
             transition: background 0.5s ease;
         }
 
-        body.light-theme .settings-section {
-            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
-        }
-
         .settings-section h3 {
             margin-bottom: 15px;
             color: #9f7aea;
             transition: color 0.5s ease;
-        }
-
-        body.light-theme .settings-section h3 {
-            color: var(--primary-color);
         }
 
         .player-name-input {
@@ -603,11 +524,6 @@
             transition: border-color 0.5s ease, background-color 0.5s ease;
         }
 
-        body.light-theme .player-name-input input {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: var(--light-text);
-        }
-
         .custom-category {
             margin: 15px 0;
         }
@@ -622,11 +538,6 @@
             width: 100%;
             max-width: 300px;
             transition: border-color 0.5s ease, background-color 0.5s ease;
-        }
-
-        body.light-theme .custom-category input {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: var(--light-text);
         }
 
         .theme-toggle {
@@ -653,14 +564,6 @@
             background: rgba(30, 30, 50, 0.5);
         }
 
-        body.light-theme .theme-toggle {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        body.light-theme .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
         .game-stats {
             display: flex;
             justify-content: space-around;
@@ -678,10 +581,6 @@
             transition: background 0.5s ease, transform 0.3s ease;
         }
 
-        body.light-theme .stat-box {
-            background: linear-gradient(135deg, rgba(226, 232, 240, 0.7) 0%, rgba(203, 213, 224, 0.7) 100%);
-        }
-
         .stat-box:hover {
             transform: translateY(-5px);
         }
@@ -690,10 +589,6 @@
             color: #9f7aea;
             margin-bottom: 10px;
             transition: color 0.5s ease;
-        }
-
-        body.light-theme .stat-box h4 {
-            color: var(--primary-color);
         }
 
         .stat-value {
@@ -824,6 +719,78 @@
             }
         }
 
+        .word-suggestions {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.7) 0%, rgba(74, 85, 104, 0.7) 100%);
+            border-radius: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .word-suggestions h3 {
+            color: #9f7aea;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .suggestion-item {
+            background: rgba(159, 122, 234, 0.2);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .suggestion-letter {
+            font-size: 1.2rem;
+            color: #63b3ed;
+            margin-bottom: 5px;
+        }
+
+        .suggestion-word {
+            font-size: 1rem;
+            color: #e2e8f0;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -879,6 +846,10 @@
                 width: 40px;
                 height: 40px;
                 font-size: 1.2rem;
+            }
+
+            .suggestion-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             }
         }
     </style>
@@ -987,6 +958,18 @@
                         <option value="books">Books</option>
                         <option value="random">Random Category</option>
                         <option value="custom">Custom Category</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="musical_instruments">Musical Instruments</option>
+                        <option value="occupations">Occupations</option>
+                        <option value="vehicles">Vehicles</option>
+                        <option value="landmarks">Landmarks</option>
+                        <option value="scientists">Scientists</option>
+                        <option value="artists">Artists</option>
+                        <option value="cartoon_characters">Cartoon Characters</option>
+                        <option value="superheroes">Superheroes</option>
+                        <option value="videogames">Video Games</option>
+                        <option value="programming_languages">Programming Languages</option>
                     </select>
                 </div>
                 <div class="custom-category" id="customCategoryContainer" style="display: none;">
@@ -1059,10 +1042,18 @@
                     <div class="stat-value" id="playersEliminated">0</div>
                 </div>
             </div>
+            
+            <div class="word-suggestions" id="wordSuggestions" style="display: none;">
+                <h3>Word Suggestions for Remaining Letters</h3>
+                <div class="suggestion-grid" id="suggestionGrid"></div>
+            </div>
+            
             <button class="btn btn-neon" onclick="resetGame()">Play Again</button>
             <button class="btn btn-secondary" onclick="goBackToStart()">Main Menu</button>
         </div>
     </div>
+
+    <button class="scroll-to-top" id="scrollToTop">↑</button>
 
     <script>
         // Game state variables
@@ -1087,7 +1078,144 @@
         const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
         
         // Available categories for random selection
-        const availableCategories = ['animals', 'countries', 'foods', 'movies', 'sports', 'brands', 'cities', 'books'];
+        const availableCategories = ['animals', 'countries', 'foods', 'movies', 'sports', 'brands', 'cities', 'books', 
+                                   'fruits', 'vegetables', 'musical_instruments', 'occupations', 'vehicles', 'landmarks',
+                                   'scientists', 'artists', 'cartoon_characters', 'superheroes', 'videogames', 'programming_languages'];
+
+        // Word database for each category
+        const wordDatabase = {
+            animals: {
+                A: 'Ant', B: 'Bear', C: 'Cat', D: 'Dog', E: 'Elephant', F: 'Fox', G: 'Giraffe', H: 'Horse', 
+                I: 'Iguana', J: 'Jaguar', K: 'Kangaroo', L: 'Lion', M: 'Monkey', N: 'Newt', O: 'Owl', 
+                P: 'Panda', Q: 'Quail', R: 'Rabbit', S: 'Snake', T: 'Tiger', U: 'Urchin', V: 'Vulture', 
+                W: 'Wolf', X: 'Xerus', Y: 'Yak', Z: 'Zebra'
+            },
+            countries: {
+                A: 'Australia', B: 'Brazil', C: 'Canada', D: 'Denmark', E: 'Egypt', F: 'France', G: 'Germany', 
+                H: 'Hungary', I: 'India', J: 'Japan', K: 'Kenya', L: 'Luxembourg', M: 'Mexico', N: 'Norway', 
+                O: 'Oman', P: 'Portugal', Q: 'Qatar', R: 'Russia', S: 'Spain', T: 'Thailand', U: 'USA', 
+                V: 'Vietnam', W: 'Wales', X: 'Xinjiang', Y: 'Yemen', Z: 'Zimbabwe'
+            },
+            foods: {
+                A: 'Apple', B: 'Banana', C: 'Cake', D: 'Donut', E: 'Eggs', F: 'Fish', G: 'Grapes', H: 'Honey', 
+                I: 'Ice Cream', J: 'Juice', K: 'Kiwi', L: 'Lemon', M: 'Milk', N: 'Noodles', O: 'Orange', 
+                P: 'Pizza', Q: 'Quiche', R: 'Rice', S: 'Salad', T: 'Tomato', U: 'Udon', V: 'Vegetables', 
+                W: 'Watermelon', X: 'Xanthan Gum', Y: 'Yogurt', Z: 'Zucchini'
+            },
+            movies: {
+                A: 'Avatar', B: 'Batman', C: 'Casablanca', D: 'Die Hard', E: 'E.T.', F: 'Frozen', G: 'Gladiator', 
+                H: 'Harry Potter', I: 'Inception', J: 'Jaws', K: 'King Kong', L: 'Lord of the Rings', M: 'Matrix', 
+                N: 'No Country for Old Men', O: 'Ocean\'s Eleven', P: 'Pulp Fiction', Q: 'Quantum of Solace', 
+                R: 'Rocky', S: 'Star Wars', T: 'Titanic', U: 'Up', V: 'Vertigo', W: 'Wizard of Oz', 
+                X: 'X-Men', Y: 'Young Frankenstein', Z: 'Zootopia'
+            },
+            sports: {
+                A: 'Archery', B: 'Basketball', C: 'Cricket', D: 'Diving', E: 'Equestrian', F: 'Football', 
+                G: 'Golf', H: 'Hockey', I: 'Ice Skating', J: 'Judo', K: 'Karate', L: 'Lacrosse', M: 'Marathon', 
+                N: 'Netball', O: 'Olympics', P: 'Polo', Q: 'Quidditch', R: 'Rugby', S: 'Soccer', T: 'Tennis', 
+                U: 'Underwater Wrestling', V: 'Volleyball', W: 'Weightlifting', X: 'Xare', Y: 'Yachting', Z: 'Zumba'
+            },
+            brands: {
+                A: 'Apple', B: 'BMW', C: 'Coca-Cola', D: 'Disney', E: 'eBay', F: 'Facebook', G: 'Google', 
+                H: 'Honda', I: 'Intel', J: 'Jeep', K: 'Kellogg\'s', L: 'Lego', M: 'Microsoft', N: 'Nike', 
+                O: 'Oracle', P: 'Pepsi', Q: 'Quaker', R: 'Rolex', S: 'Samsung', T: 'Toyota', U: 'Uber', 
+                V: 'Visa', W: 'Walmart', X: 'Xerox', Y: 'Yahoo', Z: 'Zara'
+            },
+            cities: {
+                A: 'Amsterdam', B: 'Bangkok', C: 'Cairo', D: 'Dubai', E: 'Edinburgh', F: 'Florence', 
+                G: 'Geneva', H: 'Havana', I: 'Istanbul', J: 'Jakarta', K: 'Kyoto', L: 'London', M: 'Moscow', 
+                N: 'New York', O: 'Oslo', P: 'Paris', Q: 'Quebec', R: 'Rio de Janeiro', S: 'Sydney', 
+                T: 'Tokyo', U: 'Ulaanbaatar', V: 'Venice', W: 'Warsaw', X: 'Xian', Y: 'Yerevan', Z: 'Zurich'
+            },
+            books: {
+                A: 'Alice in Wonderland', B: 'Brave New World', C: 'Catch-22', D: 'Dune', E: 'Emma', 
+                F: 'Frankenstein', G: 'Great Gatsby', H: 'Hamlet', I: 'Iliad', J: 'Jane Eyre', K: 'Kite Runner', 
+                L: 'Lord of the Flies', M: 'Moby Dick', N: '1984', O: 'Oliver Twist', P: 'Pride and Prejudice', 
+                Q: 'Quiet American', R: 'Robinson Crusoe', S: 'Sherlock Holmes', T: 'To Kill a Mockingbird', 
+                U: 'Ulysses', V: 'Vanity Fair', W: 'War and Peace', X: 'Xenogenesis', Y: 'Yearling', Z: 'Zorba the Greek'
+            },
+            fruits: {
+                A: 'Apple', B: 'Banana', C: 'Cherry', D: 'Durian', E: 'Elderberry', F: 'Fig', G: 'Grape', 
+                H: 'Honeydew', I: 'Imbe', J: 'Jackfruit', K: 'Kiwi', L: 'Lemon', M: 'Mango', N: 'Nectarine', 
+                O: 'Orange', P: 'Papaya', Q: 'Quince', R: 'Raspberry', S: 'Strawberry', T: 'Tangerine', 
+                U: 'Ugli fruit', V: 'Vanilla', W: 'Watermelon', X: 'Xigua', Y: 'Yangmei', Z: 'Zucchini'
+            },
+            vegetables: {
+                A: 'Artichoke', B: 'Broccoli', C: 'Carrot', D: 'Daikon', E: 'Eggplant', F: 'Fennel', 
+                G: 'Garlic', H: 'Horseradish', I: 'Iceberg Lettuce', J: 'Jicama', K: 'Kale', L: 'Leek', 
+                M: 'Mushroom', N: 'Napa Cabbage', O: 'Okra', P: 'Potato', Q: 'Quinoa', R: 'Radish', 
+                S: 'Spinach', T: 'Tomato', U: 'Ube', V: 'Valerian', W: 'Watercress', X: 'Xylitol', Y: 'Yam', Z: 'Zucchini'
+            },
+            musical_instruments: {
+                A: 'Accordion', B: 'Banjo', C: 'Cello', D: 'Didgeridoo', E: 'Euphonium', F: 'Flute', 
+                G: 'Guitar', H: 'Harmonica', I: 'Irish Bouzouki', J: 'Jew\'s Harp', K: 'Kazoo', L: 'Lute', 
+                M: 'Mandolin', N: 'Nyckelharpa', O: 'Oboe', P: 'Piano', Q: 'Quena', R: 'Recorder', 
+                S: 'Saxophone', T: 'Trombone', U: 'Ukulele', V: 'Violin', W: 'Washtub Bass', X: 'Xylophone', 
+                Y: 'Yaylı Tambur', Z: 'Zither'
+            },
+            occupations: {
+                A: 'Accountant', B: 'Barber', C: 'Chef', D: 'Doctor', E: 'Engineer', F: 'Firefighter', 
+                G: 'Geologist', H: 'Hairdresser', I: 'Interpreter', J: 'Journalist', K: 'Knight', L: 'Lawyer', 
+                M: 'Musician', N: 'Nurse', O: 'Optometrist', P: 'Pilot', Q: 'Quality Inspector', R: 'Receptionist', 
+                S: 'Scientist', T: 'Teacher', U: 'Umpire', V: 'Veterinarian', W: 'Writer', X: 'X-ray Technician', 
+                Y: 'Yoga Instructor', Z: 'Zoologist'
+            },
+            vehicles: {
+                A: 'Airplane', B: 'Bicycle', C: 'Car', D: 'Dump Truck', E: 'Excavator', F: 'Ferry', 
+                G: 'Garbage Truck', H: 'Helicopter', I: 'Ice Cream Truck', J: 'Jet Ski', K: 'Kayak', L: 'Limousine', 
+                M: 'Motorcycle', N: 'Nuclear Submarine', O: 'Oil Tanker', P: 'Police Car', Q: 'Quad Bike', 
+                R: 'Roller Coaster', S: 'Sailboat', T: 'Train', U: 'Utility Vehicle', V: 'Van', W: 'Wheelchair', 
+                X: 'X-ray Machine', Y: 'Yacht', Z: 'Zeppelin'
+            },
+            landmarks: {
+                A: 'Acropolis', B: 'Big Ben', C: 'Colosseum', D: 'Disneyland', E: 'Eiffel Tower', F: 'Forbidden City', 
+                G: 'Great Wall of China', H: 'Hagia Sophia', I: 'Independence Hall', J: 'Jefferson Memorial', 
+                K: 'Kremlin', L: 'Lincoln Memorial', M: 'Machu Picchu', N: 'Notre Dame', O: 'Opera House', 
+                P: 'Pyramids', Q: 'Queen\'s Palace', R: 'Red Square', S: 'Statue of Liberty', T: 'Taj Mahal', 
+                U: 'Uffizi Gallery', V: 'Versailles', W: 'White House', X: 'Xi\'an City Wall', Y: 'Yellowstone', Z: 'Ziggurat'
+            },
+            scientists: {
+                A: 'Albert Einstein', B: 'Benjamin Franklin', C: 'Charles Darwin', D: 'Dmitri Mendeleev', 
+                E: 'Erwin Schrödinger', F: 'Francis Crick', G: 'Galileo Galilei', H: 'Hypatia', 
+                I: 'Isaac Newton', J: 'James Watson', K: 'Kepler', L: 'Linus Pauling', M: 'Marie Curie', 
+                N: 'Niels Bohr', O: 'Otto Hahn', P: 'Pierre Curie', Q: 'Quetelet', R: 'Rosalind Franklin', 
+                S: 'Stephen Hawking', T: 'Tesla', U: 'Urey', V: 'Volta', W: 'Watson', X: 'Xenakis', Y: 'Yukawa', Z: 'Zwicky'
+            },
+            artists: {
+                A: 'Andy Warhol', B: 'Banksy', C: 'Claude Monet', D: 'Diego Rivera', E: 'Edvard Munch', 
+                F: 'Frida Kahlo', G: 'Georgia O\'Keeffe', H: 'Henri Matisse', I: 'Isamu Noguchi', J: 'Jackson Pollock', 
+                K: 'Katsushika Hokusai', L: 'Leonardo da Vinci', M: 'Michelangelo', N: 'Norman Rockwell', 
+                O: 'Oscar-Claude Monet', P: 'Pablo Picasso', Q: 'Qi Baishi', R: 'Rembrandt', S: 'Salvador Dalí', 
+                T: 'Vincent van Gogh', U: 'Utagawa Hiroshige', V: 'Vermeer', W: 'Warhol', X: 'Xu Beihong', Y: 'Yayoi Kusama', Z: 'Zhang Daqian'
+            },
+            cartoon_characters: {
+                A: 'Arthur', B: 'Bugs Bunny', C: 'Charlie Brown', D: 'Donald Duck', E: 'Elmer Fudd', 
+                F: 'Fred Flintstone', G: 'Garfield', H: 'Homer Simpson', I: 'Iron Man', J: 'Jerry', 
+                K: 'Kermit the Frog', L: 'Lisa Simpson', M: 'Mickey Mouse', N: 'Naruto', O: 'Olive Oyl', 
+                P: 'Popeye', Q: 'Quagmire', R: 'Road Runner', S: 'Scooby-Doo', T: 'Tom', U: 'Usagi Tsukino', 
+                V: 'Velma', W: 'Wile E. Coyote', X: 'X-Men', Y: 'Yogi Bear', Z: 'Zoidberg'
+            },
+            superheroes: {
+                A: 'Ant-Man', B: 'Batman', C: 'Captain America', D: 'Daredevil', E: 'Elasti-Girl', 
+                F: 'Flash', G: 'Green Lantern', H: 'Hulk', I: 'Iron Man', J: 'Jean Grey', 
+                K: 'Kryptonian', L: 'Luke Cage', M: 'Martian Manhunter', N: 'Nightwing', O: 'Oracle', 
+                P: 'Power Girl', Q: 'Quicksilver', R: 'Robin', S: 'Superman', T: 'Thor', U: 'Ultron', 
+                V: 'Vision', W: 'Wolverine', X: 'X-Men', Y: 'Yellowjacket', Z: 'Zatanna'
+            },
+            videogames: {
+                A: 'Animal Crossing', B: 'Battlefield', C: 'Call of Duty', D: 'Donkey Kong', E: 'Elder Scrolls', 
+                F: 'Fallout', G: 'Grand Theft Auto', H: 'Halo', I: 'Infamous', J: 'Just Cause', 
+                K: 'Kingdom Hearts', L: 'Legend of Zelda', M: 'Minecraft', N: 'Need for Speed', O: 'Overwatch', 
+                P: 'Pokemon', Q: 'Quake', R: 'Red Dead Redemption', S: 'Skyrim', T: 'Tetris', U: 'Uncharted', 
+                V: 'Valheim', W: 'World of Warcraft', X: 'Xenoblade', Y: 'Yakuza', Z: 'Zelda'
+            },
+            programming_languages: {
+                A: 'Assembly', B: 'BASIC', C: 'C', D: 'Dart', E: 'Elixir', F: 'Fortran', G: 'Go', 
+                H: 'Haskell', I: 'Java', J: 'JavaScript', K: 'Kotlin', L: 'Lisp', M: 'MATLAB', 
+                N: 'Node.js', O: 'Objective-C', P: 'Python', Q: 'Q#', R: 'Ruby', S: 'Swift', 
+                T: 'TypeScript', U: 'Unix Shell', V: 'Visual Basic', W: 'WebAssembly', X: 'XML', Y: 'YAML', Z: 'Zig'
+            }
+        };
 
         // Select device type
         function selectDevice(type) {
@@ -1169,6 +1297,23 @@
                     this.textContent = '☀️';
                     document.getElementById('themeSelect').value = 'dark';
                 }
+            });
+
+            // Scroll to top button
+            const scrollToTopButton = document.getElementById('scrollToTop');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollToTopButton.classList.add('visible');
+                } else {
+                    scrollToTopButton.classList.remove('visible');
+                }
+            });
+
+            scrollToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
         }
 
@@ -1358,6 +1503,9 @@
             // Show all remaining players as winners
             showWinners();
             
+            // Show word suggestions for remaining letters
+            showWordSuggestions();
+            
             showScreen('winnerScreen');
         }
 
@@ -1467,6 +1615,10 @@
                 document.getElementById('totalLettersUsed').textContent = totalLettersUsed;
                 document.getElementById('playersEliminated').textContent = playersEliminated;
                 document.getElementById('winnersList').innerHTML = '';
+                
+                // Show word suggestions for remaining letters
+                showWordSuggestions();
+                
                 showScreen('winnerScreen');
             } else if (activePlayers.length === 1) {
                 // Only one player left - they win!
@@ -1482,6 +1634,9 @@
                 
                 // Show the winner
                 document.getElementById('winnersList').innerHTML = `<div class="winner-badge">${activePlayers[0].name}</div>`;
+                
+                // Show word suggestions for remaining letters
+                showWordSuggestions();
                 
                 showScreen('winnerScreen');
             } else {
@@ -1552,6 +1707,41 @@
             }
         }
 
+        // Show word suggestions for remaining letters
+        function showWordSuggestions() {
+            const wordSuggestionsContainer = document.getElementById('wordSuggestions');
+            const suggestionGrid = document.getElementById('suggestionGrid');
+            
+            // Check if we have word suggestions for this category
+            if (wordDatabase[category]) {
+                wordSuggestionsContainer.style.display = 'block';
+                suggestionGrid.innerHTML = '';
+                
+                // Find remaining letters
+                const remainingLetters = alphabet.filter(letter => !usedLetters.includes(letter));
+                
+                // Add suggestions for each remaining letter
+                remainingLetters.forEach(letter => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.classList.add('suggestion-item');
+                    
+                    const suggestionLetter = document.createElement('div');
+                    suggestionLetter.classList.add('suggestion-letter');
+                    suggestionLetter.textContent = letter;
+                    
+                    const suggestionWord = document.createElement('div');
+                    suggestionWord.classList.add('suggestion-word');
+                    suggestionWord.textContent = wordDatabase[category][letter] || 'No suggestion';
+                    
+                    suggestionItem.appendChild(suggestionLetter);
+                    suggestionItem.appendChild(suggestionWord);
+                    suggestionGrid.appendChild(suggestionItem);
+                });
+            } else {
+                wordSuggestionsContainer.style.display = 'none';
+            }
+        }
+
         // End the game with winners
         function endGameWithWinners() {
             gameActive = false;
@@ -1564,6 +1754,9 @@
             
             // Show all remaining players as winners
             showWinners();
+            
+            // Show word suggestions for remaining letters
+            showWordSuggestions();
             
             showScreen('winnerScreen');
         }
@@ -1596,6 +1789,7 @@
             document.getElementById('customCategoryContainer').style.display = 'none';
             document.getElementById('themeSelect').value = isDarkTheme ? 'dark' : 'light';
             document.getElementById('timer').classList.remove('warning');
+            document.getElementById('wordSuggestions').style.display = 'none';
         }
 
         // Initialize the game when the page loads
