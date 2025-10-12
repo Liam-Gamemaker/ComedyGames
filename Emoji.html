@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Guessing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Main Menu */
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .menu-btn {
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Game Screen */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .category-badge {
+            background: linear-gradient(135deg, #ffa751 0%, #ffe259 100%);
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .emoji-display {
+            font-size: 4em;
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-area {
+            margin-bottom: 20px;
+        }
+
+        #answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        #answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: none;
+            margin-top: 15px;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+            display: block;
+        }
+
+        /* Game Over Screen */
+        .game-over-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .game-over-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #f5576c;
+            margin: 20px 0;
+        }
+
+        .game-over-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .last-question {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .last-question-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .last-emoji-display {
+            font-size: 3em;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .last-answer {
+            font-size: 1.2em;
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .emoji-display {
+                font-size: 3em;
+                padding: 20px;
+            }
+
+            .last-emoji-display {
+                font-size: 2.5em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Emoji Guessing Game 🎯</h1>
+
+        <!-- Main Menu Screen -->
+        <div id="menuScreen" class="screen active">
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="startGame()">🎯 Start Game</button>
+                <button class="menu-btn" onclick="showInstructions()">📖 How to Play</button>
+            </div>
+        </div>
+
+        <!-- Instructions Screen -->
+        <div id="instructionsScreen" class="screen">
+            <h2>How to Play</h2>
+            <p style="margin: 20px 0; line-height: 1.6;">
+                1. Guess the word or phrase represented by the emojis<br>
+                2. Type your answer in the input box<br>
+                3. Click Submit or press Enter<br>
+                4. Earn points for correct answers and build your streak!<br>
+                5. One wrong answer ends the game!
+            </p>
+            <button class="menu-btn" onclick="showMenuScreen()">Back to Menu</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-header">
+                <button class="back-btn" onclick="showMenuScreen()">←</button>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="score">0</div>
+                        <div class="stat-label">Score</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="streak">0</div>
+                        <div class="stat-label">Streak</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <span class="category-badge" id="category-display">Category</span>
+            </div>
+
+            <div class="emoji-display" id="emoji-display">Loading...</div>
+
+            <div class="input-area">
+                <input type="text" id="answer-input" placeholder="Type your answer here..." autofocus>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="checkAnswer()">Submit</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="screen">
+            <div class="game-over-content">
+                <div class="game-over-title">Game Over!</div>
+                <div class="final-score" id="final-score">0</div>
+                <div class="game-over-message" id="game-over-message">Better luck next time!</div>
+                
+                <div class="last-question" id="last-question-container" style="display: none;">
+                    <div class="last-question-title">Last Question:</div>
+                    <div class="last-emoji-display" id="last-emojis"></div>
+                    <div class="last-answer" id="last-answer"></div>
+                </div>
+                
+                <button class="menu-btn" onclick="startGame()">Play Again</button>
+                <button class="menu-btn" onclick="showMenuScreen()">Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const emojiData = {
+            "Movies": {
+                "Titanic": { emojis: "🚢💔🌊", answers: ["titanic"] },
+                "The Lion King": { emojis: "🦁👑", answers: ["lion king", "the lion king"] },
+                "Avatar": { emojis: "💙🌍👽", answers: ["avatar"] },
+                "Jurassic Park": { emojis: "🦖🛝", answers: ["jurassic park"] },
+                "The Matrix": { emojis: "💊👓", answers: ["matrix", "the matrix"] },
+                "Frozen": { emojis: "❄️⛄", answers: ["frozen"] },
+                "Star Wars": { emojis: "⭐⚔️", answers: ["star wars"] },
+                "Finding Nemo": { emojis: "🔍🐠", answers: ["finding nemo"] },
+                "The Batman": { emojis: "🦇👨", answers: ["batman", "the batman"] },
+                "Toy Story": { emojis: "🧸📚", answers: ["toy story"] }
+            },
+            "Famous People": {
+                "Ice Spice": { emojis: "🧊🌶️", answers: ["ice spice", "ice"] },
+                "Elon Musk": { emojis: "🚀💰", answers: ["elon musk", "elon"] },
+                "Eminem": { emojis: "Ⓜ️➡️Ⓜ️", answers: ["eminem", "slim", "slim"] },
+                "Spice Girls": { emojis: "🌶️👯", answers: ["spice girls", "spice"] },
+                "The Rock": { emojis: "🪨", answers: ["the rock", "rock", "dwayne johnson", "dwayne the rock johnson"] },
+                "Beyonce": { emojis: "🐝⬆️🗣️", answers: ["beyonce", "beyoncé"] },
+                "Wayne Rooney": { emojis: "🦘🦵", answers: ["wayne rooney", "wayne"] },
+                "Drake": { emojis: "🦉🎧💔", answers: ["drake"] },
+                "Michael Jordan": { emojis: "🏀🐐", answers: ["michael jordan", "jordan", "michael"] },
+                "LeBron James": { emojis: "👑🏀", answers: ["lebron james", "lebron"] }
+            },
+            "Sports": {
+                "Soccer": { emojis: "🧦", answers: ["soccer", "football"] },
+                "Basketball": { emojis: "🧺🔮", answers: ["basketball"] },
+                "Tennis": { emojis: "🔟⬆️", answers: ["tennis"] },
+                "Baseball": { emojis: "⚾🧢🏟️", answers: ["baseball"] },
+                "American Football": { emojis: "🇺🇸🦶🔮", answers: ["american football", "football", "nfl"] },
+                "Swimming": { emojis: "🏊‍♂️", answers: ["swimming"] },
+                "Boxing": { emojis: "📦", answers: ["boxing"] },
+                "Golf": { emojis: "⛳", answers: ["golf"] },
+                "Ice Hockey": { emojis: "🧊🏒", answers: ["ice hockey", "hockey"] },
+                "Volleyball": { emojis: "🏐☀️🏖️", answers: ["volleyball"] }
+            },
+            "Video Games": {
+                "Minecraft": { emojis: "⛏️🧱", answers: ["minecraft"] },
+                "Fortnite": { emojis: "🏚️🌃", answers: ["fortnite"] },
+                "Among Us": { emojis: "👽🧑‍🤝‍🧑", answers: ["among us"] },
+                "Call of Duty": { emojis: "📲➡️🫡", answers: ["call of duty", "cod"] },
+                "Super Mario": { emojis: "💪⭐", answers: ["super mario", "mario"] },
+                "Zelda": { emojis: "🗡️🧝‍♂️💎", answers: ["zelda", "legend of zelda"] },
+                "Pokémon": { emojis: "🫵🇪🐒", answers: ["pokemon", "pokémon"] },
+                "GTA": { emojis: "🚗💰💣", answers: ["gta", "grand theft auto"] },
+                "Roblox": { emojis: "🛣️🧱", answers: ["roblox"] },
+                "Sonic": { emojis: "🦔💨💙", answers: ["sonic", "sonic the hedgehog"] }
+            },
+            "TV Characters": {
+                "SpongeBob": { emojis: "🧽👨", answers: ["spongebob", "spongebob squarepants"] },
+                "Homer Simpson": { emojis: "🏚️👨", answers: ["homer simpson", "homer"] },
+                "Eleven": { emojis: "1️⃣1️⃣", answers: ["eleven", "el"] },
+                "Walter White": { emojis: "🧪👨‍🔬💰", answers: ["walter white", "heisenberg"] },
+                "Captain Hook": { emojis: "🫡🪝", answers: ["hook", "captain hook"] },
+                "Pickle Rick": { emojis: "🪝🚀🧑‍🦱", answers: ["pickle rick", "rick"] },
+                "Bart Simpson": { emojis: "🛹😜👕", answers: ["bart simpson", "bart"] },
+                "Patrick Star": { emojis: "🫳⭐", answers: ["patrick star", "patrick"] },
+                "Mickey Mouse": { emojis: "🐭🎩", answers: ["mickey mouse", "mickey"] },
+                "Scooby-Doo": { emojis: "🐶🍪🚐", answers: ["scooby doo", "scooby"] }
+            },
+            "Songs": {
+                "Let It Go": { emojis: "❄️👸", answers: ["let it go"] },
+                "Bad Guy": { emojis: "😈👧", answers: ["bad guy"] },
+                "Shake It Off": { emojis: "🤝➡️📴", answers: ["shake it off"] },
+                "Blinding Lights": { emojis: "👨‍🦯💡", answers: ["blinding lights"] },
+                "Happy": { emojis: "😀", answers: ["happy"] },
+                "Hotline Bling": { emojis: "🔥📈📿", answers: ["hotline bling"] },
+                "Uptown Funk": { emojis: "⬆️🌇", answers: ["uptown funk"] },
+                "Dynamite": { emojis: "💥🧨", answers: ["dynamite"] },
+                "Shape of You": { emojis: "◀️🫵", answers: ["shape of you"] },
+                "Old Town Road": { emojis: "🌇🛣️", answers: ["old town road"] }
+            },
+            "Countries": {
+                "Turkey": { emojis: "🐢🔑", answers: ["turkey"] },
+                "England": { emojis: "👑☕", answers: ["united kingdom", "uk", "britain", "england"] },
+                "France": { emojis: "⚃🐜🐜", answers: ["france"] },
+                "Japan": { emojis: "🇯🍳", answers: ["japan"] },
+                "Australia": { emojis: "🦘🏄", answers: ["australia"] },
+                "Tailand": { emojis: "👔🛬", answers: ["tailand", "tai"] },
+                "Italy": { emojis: "👁️📝", answers: ["italy"] },
+                "Spain": { emojis: "S 🤕", answers: ["spain"] },
+                "Hungary": { emojis: "🤤", answers: ["hungary"] },
+                "Denmark": { emojis: "🛖❓", answers: ["denmark"] }
+            }
+        };
+
+        let currentCategory = null;
+        let currentQuestion = null;
+        let score = 0;
+        let streak = 0;
+        let gameStarted = false;
+        let usedQuestions = new Set();
+        let lastQuestionEmojis = "";
+        let lastQuestionAnswer = "";
+
+        // Screen Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showMenuScreen() {
+            showScreen('menuScreen');
+        }
+
+        function showInstructions() {
+            showScreen('instructionsScreen');
+        }
+
+        function showGameScreen() {
+            showScreen('gameScreen');
+            document.getElementById('answer-input').focus();
+        }
+
+        function showGameOverScreen() {
+            showScreen('gameOverScreen');
+            document.getElementById('final-score').textContent = score;
+            
+            // Set message based on score
+            let message = "";
+            if (score >= 100) {
+                message = "Amazing! You're an emoji master! 🏆";
+            } else if (score >= 50) {
+                message = "Great job! You know your emojis! 🎉";
+            } else if (score >= 20) {
+                message = "Not bad! Keep practicing! 👍";
+            } else {
+                message = "Better luck next time! 💪";
+            }
+            
+            document.getElementById('game-over-message').textContent = message;
+            
+            // Show last question if game ended due to wrong answer
+            if (lastQuestionEmojis && lastQuestionAnswer) {
+                document.getElementById('last-question-container').style.display = 'block';
+                document.getElementById('last-emojis').textContent = lastQuestionEmojis;
+                document.getElementById('last-answer').textContent = `The answer was: ${lastQuestionAnswer}`;
+            } else {
+                document.getElementById('last-question-container').style.display = 'none';
+            }
+        }
+
+        // Game Functions
+        function startGame() {
+            gameStarted = true;
+            score = 0;
+            streak = 0;
+            usedQuestions.clear();
+            lastQuestionEmojis = "";
+            lastQuestionAnswer = "";
+            updateStats();
+            showGameScreen();
+            nextQuestion();
+        }
+
+        function getRandomQuestion() {
+            const categories = Object.keys(emojiData);
+            const availableCategories = categories.filter(cat => {
+                const questions = Object.keys(emojiData[cat]);
+                return questions.some(q => !usedQuestions.has(`${cat}-${q}`));
+            });
+
+            if (availableCategories.length === 0) {
+                // All questions used, reset
+                usedQuestions.clear();
+                return getRandomQuestion();
+            }
+
+            const randomCategory = availableCategories[Math.floor(Math.random() * availableCategories.length)];
+            const questions = Object.keys(emojiData[randomCategory]);
+            const availableQuestions = questions.filter(q => !usedQuestions.has(`${randomCategory}-${q}`));
+            
+            const randomQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+            usedQuestions.add(`${randomCategory}-${randomQuestion}`);
+            
+            return {
+                category: randomCategory,
+                answer: randomQuestion,
+                data: emojiData[randomCategory][randomQuestion]
+            };
+        }
+
+        function nextQuestion() {
+            currentQuestion = getRandomQuestion();
+            
+            document.getElementById('category-display').textContent = currentQuestion.category;
+            document.getElementById('emoji-display').textContent = currentQuestion.data.emojis;
+            document.getElementById('answer-input').value = '';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('answer-input').focus();
+        }
+
+        function checkAnswer() {
+            if (!gameStarted || !currentQuestion) return;
+            
+            const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
+            const correctAnswers = currentQuestion.data.answers;
+            const feedback = document.getElementById('feedback');
+            
+            if (correctAnswers.includes(userAnswer)) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `✅ Correct!`;
+                score += 10;
+                streak++;
+                updateStats();
+                
+                // Immediately move to next question
+                setTimeout(() => nextQuestion(), 300);
+            } else {
+                // Store the last question information
+                lastQuestionEmojis = currentQuestion.data.emojis;
+                lastQuestionAnswer = currentQuestion.answer;
+                
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `❌ Wrong! The answer was "${currentQuestion.answer}"`;
+                updateStats();
+                
+                // Game over on first wrong answer
+                setTimeout(() => showGameOverScreen(), 1000);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('answer-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
