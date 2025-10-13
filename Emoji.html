@@ -363,92 +363,111 @@
     </div>
 
     <script>
-        const emojiData = {
-            "Movies": {
-                "Titanic": { emojis: "🚢💔🌊", answers: ["titanic"] },
-                "The Lion King": { emojis: "🦁👑", answers: ["lion king", "the lion king"] },
-                "Avatar": { emojis: "💙🌍👽", answers: ["avatar"] },
-                "Jurassic Park": { emojis: "🦖🛝", answers: ["jurassic park"] },
-                "The Matrix": { emojis: "💊👓", answers: ["matrix", "the matrix"] },
-                "Frozen": { emojis: "❄️⛄", answers: ["frozen"] },
-                "Star Wars": { emojis: "⭐⚔️", answers: ["star wars"] },
-                "Finding Nemo": { emojis: "🔍🐠", answers: ["finding nemo"] },
-                "The Batman": { emojis: "🦇👨", answers: ["batman", "the batman"] },
-                "Toy Story": { emojis: "🧸📚", answers: ["toy story"] }
-            },
-            "Famous People": {
-                "Ice Spice": { emojis: "🧊🌶️", answers: ["ice spice", "ice"] },
-                "Elon Musk": { emojis: "🚀💰", answers: ["elon musk", "elon"] },
-                "Eminem": { emojis: "Ⓜ️➡️Ⓜ️", answers: ["eminem", "slim", "slim"] },
-                "Spice Girls": { emojis: "🌶️👯", answers: ["spice girls", "spice"] },
-                "The Rock": { emojis: "🪨", answers: ["the rock", "rock", "dwayne johnson", "dwayne the rock johnson"] },
-                "Beyonce": { emojis: "🐝⬆️🗣️", answers: ["beyonce", "beyoncé"] },
-                "Wayne Rooney": { emojis: "🦘🦵", answers: ["wayne rooney", "wayne"] },
-                "Drake": { emojis: "🦉🎧💔", answers: ["drake"] },
-                "Michael Jordan": { emojis: "🏀🐐", answers: ["michael jordan", "jordan", "michael"] },
-                "LeBron James": { emojis: "👑🏀", answers: ["lebron james", "lebron"] }
-            },
-            "Sports": {
-                "Soccer": { emojis: "🧦", answers: ["soccer", "football"] },
-                "Basketball": { emojis: "🧺🔮", answers: ["basketball"] },
-                "Tennis": { emojis: "🔟⬆️", answers: ["tennis"] },
-                "Baseball": { emojis: "⚾🧢🏟️", answers: ["baseball"] },
-                "American Football": { emojis: "🇺🇸🦶🔮", answers: ["american football", "football", "nfl"] },
-                "Swimming": { emojis: "🏊‍♂️", answers: ["swimming"] },
-                "Boxing": { emojis: "📦", answers: ["boxing"] },
-                "Golf": { emojis: "⛳", answers: ["golf"] },
-                "Ice Hockey": { emojis: "🧊🏒", answers: ["ice hockey", "hockey"] },
-                "Volleyball": { emojis: "🏐☀️🏖️", answers: ["volleyball"] }
-            },
-            "Video Games": {
-                "Minecraft": { emojis: "⛏️🧱", answers: ["minecraft"] },
-                "Fortnite": { emojis: "🏚️🌃", answers: ["fortnite"] },
-                "Among Us": { emojis: "👽🧑‍🤝‍🧑", answers: ["among us"] },
-                "Call of Duty": { emojis: "📲➡️🫡", answers: ["call of duty", "cod"] },
-                "Super Mario": { emojis: "💪⭐", answers: ["super mario", "mario"] },
-                "Zelda": { emojis: "🗡️🧝‍♂️💎", answers: ["zelda", "legend of zelda"] },
-                "Pokémon": { emojis: "🫵🇪🐒", answers: ["pokemon", "pokémon"] },
-                "GTA": { emojis: "🚗💰💣", answers: ["gta", "grand theft auto"] },
-                "Roblox": { emojis: "🛣️🧱", answers: ["roblox"] },
-                "Sonic": { emojis: "🦔💨💙", answers: ["sonic", "sonic the hedgehog"] }
-            },
-            "TV Characters": {
-                "SpongeBob": { emojis: "🧽👨", answers: ["spongebob", "spongebob squarepants"] },
-                "Homer Simpson": { emojis: "🏚️👨", answers: ["homer simpson", "homer"] },
-                "Eleven": { emojis: "1️⃣1️⃣", answers: ["eleven", "el"] },
-                "Walter White": { emojis: "🧪👨‍🔬💰", answers: ["walter white", "heisenberg", "walter", "Walter", "Walter white"] },
-                "Captain Hook": { emojis: "🫡🪝", answers: ["hook", "captain hook"] },
-                "Pickle Rick": { emojis: "🪝🚀🧑‍🦱", answers: ["pickle rick", "rick"] },
-                "Bart Simpson": { emojis: "🛹😜👕", answers: ["bart simpson", "bart"] },
-                "Patrick Star": { emojis: "🫳⭐", answers: ["patrick star", "patrick"] },
-                "Mickey Mouse": { emojis: "🐭🎩", answers: ["mickey mouse", "mickey"] },
-                "Scooby-Doo": { emojis: "🐶🍪🚐", answers: ["scooby doo", "scooby"] }
-            },
-            "Songs": {
-                "Let It Go": { emojis: "❄️👸", answers: ["let it go"] },
-                "Bad Guy": { emojis: "😈👧", answers: ["bad guy"] },
-                "Shake It Off": { emojis: "🤝➡️📴", answers: ["shake it off"] },
-                "Blinding Lights": { emojis: "👨‍🦯💡", answers: ["blinding lights"] },
-                "Happy": { emojis: "😀", answers: ["happy"] },
-                "Hotline Bling": { emojis: "🔥📈📿", answers: ["hotline bling"] },
-                "Uptown Funk": { emojis: "⬆️🌇", answers: ["uptown funk"] },
-                "Dynamite": { emojis: "💥🧨", answers: ["dynamite"] },
-                "Shape of You": { emojis: "◀️🫵", answers: ["shape of you"] },
-                "Old Town Road": { emojis: "🌇🛣️", answers: ["old town road"] }
-            },
-            "Countries": {
-                "Turkey": { emojis: "🐢🔑", answers: ["turkey"] },
-                "England": { emojis: "👑☕", answers: ["united kingdom", "uk", "britain", "england"] },
-                "France": { emojis: "⚃🐜🐜", answers: ["france"] },
-                "Japan": { emojis: "🇯🍳", answers: ["japan"] },
-                "Australia": { emojis: "🦘🏄", answers: ["australia"] },
-                "Tailand": { emojis: "👔🛬", answers: ["tailand", "tai"] },
-                "Italy": { emojis: "👁️📝", answers: ["italy"] },
-                "Spain": { emojis: "S 🤕", answers: ["spain"] },
-                "Hungary": { emojis: "🤤", answers: ["hungary"] },
-                "Denmark": { emojis: "🛖❓", answers: ["denmark"] }
-            }
-        };
+const emojiData = {
+    "Movies": {
+        "Titanic": { emojis: "🚢💔🌊", answers: ["titanic", "Titanic", "TITANIC", "titannic", "titnic", "titanik", "tittanic", "titanic movie", "the titanic", "titanics", "titanic ship", "titanicc", "titanic boat"] },
+        "The Lion King": { emojis: "🦁👑", answers: ["lion king", "the lion king", "lionking", "lion kin", "lyon king", "the lyon king", "lion kng", "lion kinng", "lion kinj", "simbas story", "lion kin g", "lion kig", "lion kngg"] },
+        "Avatar": { emojis: "💙🌍👽", answers: ["avatar", "Avatar", "AVATAR", "avater", "avtar", "avatarr", "avatr", "avataar", "avatarr", "avatar movie", "avatarr", "avtar", "avtar"] },
+        "Jurassic Park": { emojis: "🦖🛝", answers: ["jurassic park", "jurassicpark", "jurassic", "jurassic prk", "jurassic parc", "jurassic prak", "jurassic parkk", "jurassic par", "jurassic parck", "dinosaur park", "jurrasic park", "jurassic pak"] },
+        "The Matrix": { emojis: "💊👓", answers: ["matrix", "the matrix", "matrixx", "matix", "matriix", "the matrixx", "the matix", "the matriix", "matrix movie", "the matrix movie", "matricks", "matrx", "mattrix"] },
+        "Frozen": { emojis: "❄️⛄", answers: ["frozen", "Frozen", "FROZEN", "froze", "frozn", "frozeen", "frozzn", "frozn", "froze n", "frozen movie", "disney frozen", "froze", "frozn"] },
+        "Star Wars": { emojis: "⭐⚔️", answers: ["star wars", "starwars", "star war", "star warz", "star wrs", "star warrs", "star warss", "star wars movie", "starwar", "st wars", "starwars movie", "star wras"] },
+        "Finding Nemo": { emojis: "🔍🐠", answers: ["finding nemo", "findingnemo", "findin nemo", "finding nemmo", "finding nemoo", "finding nemo movie", "find nemo", "fnding nemo", "finding nemo fish", "nemo", "findng nemo", "findin nemo"] },
+        "The Batman": { emojis: "🦇👨", answers: ["batman", "the batman", "batmann", "bat man", "the bat man", "batmann", "batmn", "the batmn", "batman movie", "the batman movie", "dark knight", "bruce wayne"] },
+        "Men in Black": { emojis: "👨➡️⚫", answers: ["men in black", "Men in black", "men in Black", "MEN IN BLACK", "meninblack", "men in blak", "men in blck", "men in blackk", "men in blk", "mib", "men in black movie", "men in blakc"] },
+        "Cloudy with a chance of Meatballs": { emojis: "⭐⚔️", answers: ["Cloudy with a chance of Meatballs", "cloudy with a chance of meatballs", "cloudy meatballs", "cloudy with meatballs", "cloudy chance meatballs", "cloudy with a chance of meatballs", "cloudy with a chance of meatballls", "cloudy with a chance of meatbals", "cloudy with a chance of meat balls", "cloudy with a chance of meatballz", "cloudy meatball", "cloudy with meatball"] },
+        "Ghost Busters": { emojis: "👻🔫", answers: ["ghost busters", "ghostbusters", "ghost buster", "ghost busterss", "ghost busterz", "ghost bstrs", "ghostbusters movie", "ghost busters movie", "ghost bstrs", "ghost bussers", "ghost busterss"] },
+        "8 Mile": { emojis: "8🛣️", answers: ["8 mile", "eight mile", "8mile", "eightmile", "8 mile movie", "eight mile movie", "8 mle", "eight mle", "8 mil", "eight mil", "8 miel", "eight miel"] },
+        "Home Alone": { emojis: "🏡👨", answers: ["home alone"] },
+        "Dark Knight": { emojis: "⚫🛡️", answers: ["the dark knight"] },
+        "Daddy's Home": { emojis: "👨‍🍼🏡", answers: ["Daddys home"] },
+        "Moana": { emojis: "🌊👧🏽", answers: ["moana"] },
+        "Up": { emojis: "⬆️", answers: ["up"] },
+           "Cars": { emojis: "🚗🚙", answers: ["cars"] },
+            "Walle": { emojis: "🧱E", answers: ["walle", "wallie"] },
+        "Toy Story": { emojis: "🧸📚", answers: ["toy story", "toystory", "toy storry", "toy stor", "toy stori", "toy story movie", "toy storie", "toy stry", "toy stor y", "toy sory", "toy storuy", "toy stori"] }
+    },
+    "Famous People": {
+        "Ice Spice": { emojis: "🧊🌶️", answers: ["ice spice", "ice", "Ice Spice", "ICE SPICE", "ice spicee", "ice spic", "ice spice rapper", "ice spice music", "ice spce", "ice spiice", "ice spie", "ice spicee"] },
+        "Elon Musk": { emojis: "🚀💰", answers: ["elon musk", "elon", "Elon Musk", "ELON MUSK", "elon muskk", "elon musc", "elon mask", "elon musk tesla", "elon musk spacex", "elonmusk", "elon musk ceo", "elon musk billionaire"] },
+        "Eminem": { emojis: "Ⓜ️➡️Ⓜ️", answers: ["eminem", "slim", "Eminem", "EMINEM", "eminemm", "slim shady", "marshall mathers", "eminem rapper", "eminem music", "eminem slim", "eminem shady", "slim shady"] },
+        "Spice Girls": { emojis: "🌶️👯", answers: ["spice girls", "spice", "Spice Girls", "SPICE GIRLS", "spice girlss", "spice girl", "spice girls band", "spice girls music", "spicegirl", "spice girsl", "spice girs", "spice grils"] },
+        "The Rock": { emojis: "🪨", answers: ["the rock", "rock", "dwayne johnson", "dwayne the rock johnson", "The Rock", "THE ROCK", "the rockk", "the roc", "dwayne the rock", "rock johnson", "dwayn johnson", "dwayne the rock"] },
+        "Beyonce": { emojis: "🐝⬆️🗣️", answers: ["beyonce", "beyoncé", "Beyonce", "BEYONCE", "beyoncee", "beyonce singer", "beyonce music", "beyonce knowles", "beyonce queen", "beyoncee", "beyonnce", "beyoncee"] },
+        "Wayne Rooney": { emojis: "🦘🦵", answers: ["wayne rooney", "wayne", "Wayne Rooney", "WAYNE ROONEY", "wayne rooneey", "wayne roony", "wayne rooney football", "wayne rooney manchester", "wayne rooney soccer", "wayne rooney player", "wayne rooney striker", "wayne rooney england"] },
+        "Drake": { emojis: "🦉🎧💔", answers: ["drake", "Drake", "DRAKE", "drakee", "drake rapper", "drake music", "drake singer", "drakeo", "drakke", "drak", "drake artist", "drakke"] },
+        "Michael Jordan": { emojis: "🏀🐐", answers: ["michael jordan", "jordan", "michael", "Michael Jordan", "MICHAEL JORDAN", "michael jordann", "michael jordn", "michael jordan basketball", "michael jordan nba", "michael jordan bulls", "michael jordan goat", "michael jordan air"] },
+        "Katy Perry": { emojis: "🐱🍐", answers: ["katy perry", "katy"] },
+         "Billie Eilish": { emojis: "💵👁️🧃", answers: ["billie eilish", "billie"] },
+         "Lil Nas X": { emojis: "👶🎶❌", answers: ["lil nas x"] }, // lil (baby) + nas (music) + x (cross)
+    "Ice Cube": { emojis: "🧊🧊", answers: ["ice cube"] },
+    "Playboi Carti": { emojis: "🎮👦🛒", answers: ["playboi carti"] },
+        "LeBron James": { emojis: "👑🏀", answers: ["lebron james", "lebron", "LeBron James", "LEBRON JAMES", "lebron jamese", "lebron james basketball", "lebron james nba", "lebron james lakers", "lebron james king", "lebron james goat", "lebron james player", "lebron james champion"] }
+    },
+    "Sports": {
+        "Soccer": { emojis: "🧦", answers: ["soccer", "football", "Soccer", "SOCCER", "soccer sport", "soccer game", "football sport", "football game", "soccer ball", "football ball", "soccer match", "football match"] },
+        "Basketball": { emojis: "🧺🔮", answers: ["basketball", "Basketball", "BASKETBALL", "basket ball", "basketbball", "basketball sport", "basketball game", "basketball nba", "basketball hoop", "basketball court", "basketball player", "basket ball"] },
+        "Tennis": { emojis: "🔟⬆️", answers: ["tennis", "Tennis", "TENNIS", "tennis sport", "tennis game", "tennis court", "tennis racket", "tennis ball", "tennis match", "tennis player", "tennis tournament", "tennis racket"] },
+        "Baseball": { emojis: "⚾🧢🏟️", answers: ["baseball", "Baseball", "BASEBALL", "base ball", "basebball", "baseball sport", "baseball game", "baseball bat", "baseball glove", "baseball field", "baseball player", "base ball"] },
+        "American Football": { emojis: "🇺🇸🦶🔮", answers: ["american football", "football", "nfl", "American Football", "AMERICAN FOOTBALL", "american football sport", "american football game", "nfl football", "nfl sport", "nfl game", "american football league", "american football team"] },
+        "Swimming": { emojis: "🏊‍♂️", answers: ["swimming", "Swimming", "SWIMMING", "swimming sport", "swimming pool", "swimming race", "swimming competition", "swimming athlete", "swimming olympics", "swimming stroke", "swimming meet", "swimming pool"] },
+        "Boxing": { emojis: "📦", answers: ["boxing", "Boxing", "BOXING", "boxing sport", "boxing match", "boxing fight", "boxing ring", "boxing gloves", "boxing champion", "boxing fighter", "boxing punch", "boxing gloves"] },
+        "Golf": { emojis: "⛳", answers: ["golf", "Golf", "GOLF", "golf sport", "golf game", "golf course", "golf club", "golf ball", "golf player", "golf tournament", "golf swing", "golf course"] },
+        "Ice Hockey": { emojis: "🧊🏒", answers: ["ice hockey", "hockey", "Ice Hockey", "ICE HOCKEY", "ice hockey sport", "ice hockey game", "hockey sport", "hockey game", "ice hockey rink", "ice hockey puck", "ice hockey stick", "ice hockey player"] },
+        "Volleyball": { emojis: "🏐☀️🏖️", answers: ["volleyball", "Volleyball", "VOLLEYBALL", "volley ball", "volleybball", "volleyball sport", "volleyball game", "volleyball net", "volleyball court", "volleyball player", "volleyball match", "volley ball"] }
+    },
+    "Video Games": {
+        "Minecraft": { emojis: "⛏️🧱", answers: ["minecraft", "Minecraft", "MINECRAFT", "mine craft", "minecraft game", "minecraft block", "minecraft building", "minecraft sandbox", "minecraft mojang", "minecraft java", "minecraft bedrock", "mine craft"] },
+        "Fortnite": { emojis: "🏚️🌃", answers: ["fortnite", "Fortnite", "FORTNITE", "fort nite", "fortnite game", "fortnite battle royale", "fortnite epic", "fortnite free", "fortnite online", "fortnite player", "fortnite skin", "fort nite"] },
+        "Among Us": { emojis: "👽🧑‍🤝‍🧑", answers: ["among us", "Among Us", "AMONG US", "amongus", "among us game", "among us space", "among us imposter", "among us crewmate", "among us online", "among us multiplayer", "among us sus", "amongus"] },
+        "Call of Duty": { emojis: "📲➡️🫡", answers: ["call of duty", "cod", "Call of Duty", "CALL OF DUTY", "callofduty", "call of duty game", "call of duty warzone", "call of duty modern warfare", "call of duty black ops", "call of duty fps", "call of duty multiplayer", "call of duty shooter"] },
+        "Super Mario": { emojis: "💪⭐", answers: ["super mario", "mario", "Super Mario", "SUPER MARIO", "supermario", "super mario bros", "super mario game", "super mario nintendo", "super mario platformer", "super mario jump", "super mario mushroom", "super mario luigi"] },
+        "Zelda": { emojis: "🗡️🧝‍♂️💎", answers: ["zelda", "legend of zelda", "Zelda", "ZELDA", "zelda game", "legend of zelda game", "zelda nintendo", "zelda link", "zelda hyrule", "zelda adventure", "zelda triforce", "zelda breath of the wild"] },
+        "Pokémon": { emojis: "🫵🇪🐒", answers: ["pokemon", "pokémon", "Pokemon", "POKEMON", "pokemón", "pokemon game", "pokemon go", "pokemon nintendo", "pokemon catch", "pokemon battle", "pokemon pikachu", "pokemon trainer"] },
+        "GTA": { emojis: "🚗💰💣", answers: ["gta", "grand theft auto", "GTA", "GRAND THEFT AUTO", "grand theft auto game", "grand theft auto v", "grand theft auto san andreas", "grand theft auto vice city", "gta v", "gta online", "gta rockstar", "gta open world"] },
+        "Roblox": { emojis: "🛣️🧱", answers: ["roblox", "Roblox", "ROBLOX", "robloxx", "roblox game", "roblox online", "roblox platform", "roblox create", "roblox play", "roblox user", "roblox avatar", "robloxx"] },
+        
+        "Sonic": { emojis: "🦔💨💙", answers: ["sonic", "sonic the hedgehog", "Sonic", "SONIC", "sonicc", "sonic game", "sonic the hedgehog game", "sonic sega", "sonic speed", "sonic rings", "sonic tails", "sonic knuckles"] }
+    },
+    "TV Characters": {
+        "SpongeBob": { emojis: "🧽👨", answers: ["spongebob", "spongebob squarepants", "SpongeBob", "SPONGEBOB", "spongebob squarepants", "spongebob show", "spongebob nickelodeon", "spongebob patrick", "spongebob squidward", "spongebob bikini bottom", "spongebob krusty krab", "spongebob pineapple"] },
+        "Homer Simpson": { emojis: "🏚️👨", answers: ["homer simpson", "homer", "Homer Simpson", "HOMER SIMPSON", "homer simpson show", "homer simpson simpsons", "homer simpson duff", "homer simpson donut", "homer simpson springfield", "homer simpson marge", "homer simpson bart", "homer simpson lisa"] },
+        "Eleven": { emojis: "1️⃣1️⃣", answers: ["eleven", "el", "Eleven", "ELEVEN", "eleven stranger things", "eleven millie", "eleven powers", "eleven upside down", "eleven hopper", "eleven mike", "eleven lucas", "eleven dustin"] },
+        "Walter White": { emojis: "🧪👨‍🔬💰", answers: ["walter white", "heisenberg", "Walter", "walter", "Walter White", "WALTER WHITE", "walter white breaking bad", "heisenberg breaking bad", "walter white chemistry", "walter white meth", "walter white cancer", "walter white teacher"] },
+        "Captain Hook": { emojis: "🫡🪝", answers: ["hook", "captain hook", "Captain Hook", "CAPTAIN HOOK", "captain hook peter pan", "captain hook pirate", "captain hook ship", "captain hook hook", "captain hook crocodile", "captain hook smee", "captain hook neverland", "captain hook disney"] },
+        "Pickle Rick": { emojis: "🥒🚀🧑‍🦱", answers: ["pickle rick", "rick", "Pickle Rick", "PICKLE RICK", "pickle rick rick and morty", "pickle rick episode", "pickle rick sauce", "pickle rick lab", "pickle rick morty", "pickle rick summer", "pickle rick beth", "pickle rick jerry"] },
+        "Bart Simpson": { emojis: "🛹😜👕", answers: ["bart simpson", "bart", "Bart Simpson", "BART SIMPSON", "bart simpson show", "bart simpson simpsons", "bart simpson skateboard", "bart simpson prank", "bart simpson milhouse", "bart simpson springfield", "bart simpson homer", "bart simpson lisa"] },
+        "Patrick Star": { emojis: "🫳⭐", answers: ["patrick star", "patrick", "Patrick Star", "PATRICK STAR", "patrick star spongebob", "patrick star pink", "patrick star dumb", "patrick star squidward", "patrick star sandy", "patrick star bikini bottom", "patrick star rock", "patrick star gary"] },
+        "Mickey Mouse": { emojis: "🐭🎩", answers: ["mickey mouse", "mickey", "Mickeymouse", "Mickey Mouse", "MICKEY MOUSE", "mickey mouse disney", "mickey mouse minnie", "mickey mouse donald", "mickey mouse goofy", "mickey mouse clubhouse", "mickey mouse ears", "mickey mouse cartoon"] },
+        "Wednesday Addams": { emojis: "📅🕷️", answers: ["wednesday addams", "wednesday"] }, // calendar + creepy spider
+         "Sherlock Holmes": { emojis: "🕵️‍♂️🔍", answers: ["sherlock holmes", "sherlock"] }, // detective + magnifier
+        "Scooby-Doo": { emojis: "🐶🍪🚐", answers: ["scooby doo", "scooby", "Scooby-Doo", "SCOOBY-DOO", "scooby doo show", "scooby doo mystery", "scooby doo shaggy", "scooby doo velma", "scooby doo daphne", "scooby doo fred", "scooby doo mystery machine", "scooby doo snacks"] }
+    },
+    "Songs": {
+        "Let It Go": { emojis: "❄️👸", answers: ["let it go", "Let It Go", "LET IT GO", "let it go frozen", "let it go elsa", "let it go idina", "let it go disney", "let it go song", "let it go lyrics", "let it go movie", "let it go cover", "let it go frozen"] },
+        "Bad Guy": { emojis: "😈👧", answers: ["bad guy", "Bad Guy", "BAD GUY", "bad guy billie", "bad guy eilish", "bad guy song", "bad guy lyrics", "bad guy music", "bad guy pop", "bad guy hit", "bad guy track", "bad guy billie"] },
+        "Shake It Off": { emojis: "🤝➡️📴", answers: ["shake it off", "Shake It Off", "SHAKE IT OFF", "shake it off taylor", "shake it off swift", "shake it off song", "shake it off lyrics", "shake it off music", "shake it off pop", "shake it off hit", "shake it off track", "shake it off taylor"] },
+        "Blinding Lights": { emojis: "👨‍🦯💡", answers: ["blinding lights", "Blinding Lights", "BLINDING LIGHTS", "blinding lights the weeknd", "blinding lights song", "blinding lights lyrics", "blinding lights music", "blinding lights pop", "blinding lights hit", "blinding lights track", "blinding lights album", "blinding lights weeknd"] },
+        "Happy": { emojis: "😀", answers: ["happy", "Happy", "HAPPY", "happy pharrell", "happy williams", "happy song", "happy lyrics", "happy music", "happy pop", "happy hit", "happy track", "happy pharrell"] },
+        "Hotline Bling": { emojis: "🔥📈📿", answers: ["hotline bling", "Hotline Bling", "HOTLINE BLING", "hotline bling drake", "hotline bling song", "hotline bling lyrics", "hotline bling music", "hotline bling pop", "hotline bling hit", "hotline bling track", "hotline bling video", "hotline bling drake"] },
+        "Uptown Funk": { emojis: "⬆️🌇", answers: ["uptown funk", "Uptown Funk", "UPTOWN FUNK", "uptown funk mark", "uptown funk ronson", "uptown funk mars", "uptown funk song", "uptown funk lyrics", "uptown funk music", "uptown funk pop", "uptown funk hit", "uptown funk mark"] },
+        "Dynamite": { emojis: "💥🧨", answers: ["dynamite", "Dynamite", "DYNAMITE", "dynamite bts", "dynamite bangtan", "dynamite song", "dynamite lyrics", "dynamite music", "dynamite pop", "dynamite hit", "dynamite track", "dynamite bts"] },
+        "Shape of You": { emojis: "◀️🫵", answers: ["shape of you", "Shape of You", "SHAPE OF YOU", "shape of you ed", "shape of you sheeran", "shape of you song", "shape of you lyrics", "shape of you music", "shape of you pop", "shape of you hit", "shape of you track", "shape of you ed"] },
+        "Old Town Road": { emojis: "🌇🛣️", answers: ["old town road", "Old Town Road", "OLD TOWN ROAD", "old town road lil", "old town road nas", "old town road billy", "old town road song", "old town road lyrics", "old town road music", "old town road country", "old town road hit", "old town road lil"] }
+    },
+    "Countries": {
+        "Turkey": { emojis: "🐢🔑", answers: ["turkey", "Turkey", "TURKEY", "turkiye", "turkey country", "turkey nation", "turkey asia", "turkey europe", "turkey anatolia", "turkey ottoman", "turkey republic", "turkiye"] },
+        "England": { emojis: "👑☕", answers: ["united kingdom", "uk", "britain", "england", "England", "ENGLAND", "england country", "england uk", "england britain", "england great britain", "england london", "england europe"] },
+        "France": { emojis: "⚃🐜🐜", answers: ["france", "France", "FRANCE", "france country", "france nation", "france europe", "france paris", "france republic", "france french", "france eiffel", "france louvre", "france paris"] },
+        "Japan": { emojis: "🇯🍳", answers: ["japan", "Japan", "JAPAN", "japan country", "japan nation", "japan asia", "japan tokyo", "japanese", "japan island", "japan empire", "japan rising sun", "japan tokyo"] },
+        "Australia": { emojis: "🦘🏄", answers: ["australia", "Australia", "AUSTRALIA", "australia country", "australia nation", "australia oceania", "australia sydney", "australia melbourne", "australia outback", "australia island", "australia continent", "australia sydney"] },
+        "Tailand": { emojis: "👔🛬", answers: ["thailand", "tai", "Thailand", "THAILAND", "thailand country", "thailand nation", "thailand asia", "thailand bangkok", "thailand siam", "thailand land of smiles", "thailand thai", "thailand kingdom"] },
+        "Italy": { emojis: "👁️📝", answers: ["italy", "Italy", "ITALY", "italy country", "italy nation", "italy europe", "italy rome", "italy pizza", "italy pasta", "italy vatican", "italy republic", "italy rome"] },
+        "Spain": { emojis: "S🤕", answers: ["spain", "Spain", "SPAIN", "spain country", "spain nation", "spain europe", "spain madrid", "spain barcelona", "spain spanish", "spain kingdom", "spain ibera", "spain madrid"] },
+        "Hungary": { emojis: "🤤🍴", answers: ["hungary", "Hungary", "HUNGARY", "hungary country", "hungary nation", "hungary europe", "hungary budapest", "hungary magyar", "hungary hungarian", "hungary kingdom", "hungary republic", "hungary budapest"] },
+        "Denmark": { emojis: "🛖❓", answers: ["denmark", "Denmark", "DENMARK", "denmark country", "denmark nation", "denmark europe", "denmark copenhagen", "denmark danish", "denmark kingdom", "denmark scandinavia", "denmark vikings", "denmark copenhagen"] }
+    }
+};
 
         let currentCategory = null;
         let currentQuestion = null;
