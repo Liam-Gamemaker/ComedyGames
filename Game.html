@@ -577,6 +577,64 @@
       background: rgba(46, 204, 113, 0.2);
       border-color: var(--success-color);
     }
+    /* Dead Reveal Screen */
+    .dead-reveal-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--dark-bg);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2500;
+      text-align: center;
+    }
+    .dead-reveal-content {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 25px;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+    }
+    .dead-reveal-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 30px;
+      color: var(--danger-color);
+    }
+    .dead-reveal-info {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .dead-reveal-word {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--success-color);
+      margin: 20px 0;
+    }
+    .dead-reveal-roles {
+      margin-top: 30px;
+      text-align: left;
+    }
+    .dead-player-role {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px;
+      margin: 8px 0;
+      background: var(--glass-bg);
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+    }
+    .dead-player-role.imposter {
+      background: rgba(231, 76, 60, 0.2);
+      border-color: var(--danger-color);
+    }
     /* Animations */
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
@@ -650,9 +708,12 @@
     /* Cheat Panel Styles - Subtle Design */
     #cheatPanel {
       position: fixed;
-      bottom: 20px;
-      left: 20px;
+      top: 130px;
       right: 20px;
+      left: auto;
+      bottom: auto;
+      width: 320px;
+      max-height: 70vh;
       z-index: 9999;
       display: none;
       background: rgba(0,0,0,0.9);
@@ -661,7 +722,6 @@
       border-radius: 15px;
       font-size: 14px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-      max-height: 70vh;
       overflow-y: auto;
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.1);
@@ -669,22 +729,25 @@
     
     #cheatButton {
       position: fixed;
-      bottom: 20px;
-      left: 20px;
-      width: 24px;
-      height: 24px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      top: 80px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 50%;
       cursor: pointer;
       z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
       transition: all 0.3s ease;
     }
     
     #cheatButton:hover {
-      background: rgba(255,255,255,0.15);
-      transform: scale(1.2);
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
     }
     
     #cheatButton:active {
@@ -694,19 +757,19 @@
     /* Mobile adjustments */
     @media (max-width: 768px) {
       #cheatPanel {
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
+        top: 110px;
+        right: 15px;
+        width: 280px;
         font-size: 12px;
         padding: 10px;
-        max-height: 60vh;
       }
       
       #cheatButton {
-        bottom: 10px;
-        left: 10px;
-        width: 20px;
-        height: 20px;
+        top: 70px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
       }
     }
   </style>
@@ -735,6 +798,18 @@
         <button class="action-btn warning" onclick="showCountdown()" id="countdownBtn">
           ⏱️ Start Countdown
         </button>
+      </div>
+    </div>
+  </div>
+  <!-- Dead Reveal Screen -->
+  <div id="deadRevealScreen" class="dead-reveal-screen">
+    <div class="dead-reveal-content">
+      <div class="dead-reveal-title">💀 Information for Eliminated Players</div>
+      <div class="dead-reveal-info">This screen shows the secret word and all player roles for eliminated players.</div>
+      <div class="dead-reveal-word" id="deadRevealWord"></div>
+      <div class="dead-reveal-roles" id="deadRevealRoles"></div>
+      <div class="action-buttons">
+        <button class="action-btn primary" onclick="closeDeadReveal()">✅ Done</button>
       </div>
     </div>
   </div>
@@ -775,7 +850,7 @@
         <div class="setup-grid">
           <div class="setup-item">
             <label for="playerCount">Number of Players:</label>
-            <select id="playerCount">
+            <select id="playerCount" onchange="updatePlayerCountOptions()">
               <option value="4">4 Players</option>
               <option value="5" selected>5 Players</option>
               <option value="6">6 Players</option>
@@ -925,6 +1000,9 @@
           <button class="action-btn warning" onclick="skipVote()" id="skipVoteBtn">
             ⏭️ Skip Vote
           </button>
+          <button class="action-btn info" onclick="showDeadReveal()" id="deadRevealBtn" style="display: none;">
+            💀 For the dead
+          </button>
         </div>
       </div>
       <!-- Players Status -->
@@ -954,8 +1032,8 @@
     <div id="cheatInfo"></div>
   </div>
   
-  <!-- Cheat Button -->
-  <div id="cheatButton" onclick="toggleCheatPanel()"></div>
+  <!-- Cheat Button (moved to top right) -->
+  <div id="cheatButton" onclick="toggleCheatPanel()">🕵️</div>
   
   <script>
     // Game State Variables
@@ -987,6 +1065,7 @@
     let soundEnabled = true;
     let currentTheme = 'dark';
     
+    // Word categories with broader hints
     const easyWordCategories = {
       Animals: [ "Whale", "Pelican", "Emu", "Lion", "Wolf", "Shark", "Bee", "Bunny", "Cat", "Bird", "Kangaroo", "Fish", "Dog"],
       Fruits: ["Plum", "Apricot", "Mango", "Apple", "Pear", "Watermelon", "Passionfruit", "Banana", "Grape", "Pineapple", "Orange", "Strawberry", "Rasberry"],
@@ -1015,189 +1094,442 @@
       Brands: ["Nike", "Team 10", "Vans", "Reebok", "Fifa", "Google", "Apple", "Adidas", "Victoria's Secret", "McDonald's", "Faze", "Hype House", "Bop House"],
       Villans: ["Joker", "Uma", "Thanos", "Harely Quinn", "Bane", "Green Goblen", "Lex Luther", "Mysterio", "Prowler", "King Pin", "Omni Man", "Loki", "Darth Vader", "Voldemort", "Ghost Face", "Chucky", "PennyWise"],
     };
-    // Default to easy
-    let currentWordCategories = easyWordCategories;
     
-    // Word hints
-    const wordHints = {
+    // Broader hint categories
+    const broadHints = {
+      // Animal categories
+      "Mammals": "This is a type of mammal.",
+      "Birds": "This is a type of bird.",
+      "Reptiles": "This is a type of reptile.",
+      "Fish": "This is a type of fish.",
+      "Insects": "This is a type of insect.",
+      "Pets": "This is commonly kept as a pet.",
+      "Wild Animals": "This is a wild animal.",
+      "Farm Animals": "This is a farm animal.",
+      "Marine Animals": "This lives in the ocean.",
+      "Large Animals": "This is a large animal.",
+      "Small Animals": "This is a small animal.",
+      
+      // Fruit categories
+      "Tropical Fruits": "This is a tropical fruit.",
+      "Berries": "This is a type of berry.",
+      "Citrus Fruits": "This is a citrus fruit.",
+      "Stone Fruits": "This is a stone fruit.",
+      "Common Fruits": "This is a common fruit.",
+      "Exotic Fruits": "This is an exotic fruit.",
+      
+      // Job categories
+      "Medical Jobs": "This is a job in the medical field.",
+      "Education Jobs": "This is a job in education.",
+      "Entertainment Jobs": "This is a job in entertainment.",
+      "Service Jobs": "This is a service job.",
+      "Creative Jobs": "This job requires creativity.",
+      "Technical Jobs": "This job requires technical skills.",
+      "Public Service Jobs": "This is a public service job.",
+      "Blue Collar Jobs": "This is a blue collar job.",
+      "White Collar Jobs": "This is a white collar job.",
+      
+      // Song categories
+      "Children's Songs": "This is a children's song.",
+      "Pop Songs": "This is a pop song.",
+      "Holiday Songs": "This is a holiday song.",
+      "Nursery Rhymes": "This is a nursery rhyme.",
+      "Hip Hop Songs": "This is a hip hop song.",
+      "Rock Songs": "This is a rock song.",
+      "Classic Songs": "This is a classic song.",
+      "Recent Hits": "This is a recent hit song.",
+      
+      // Instrument categories
+      "String Instruments": "This is a string instrument.",
+      "Wind Instruments": "This is a wind instrument.",
+      "Percussion Instruments": "This is a percussion instrument.",
+      "Electronic Instruments": "This is an electronic instrument.",
+      "Common Instruments": "This is a common instrument.",
+      "Orchestral Instruments": "This is an orchestral instrument.",
+      
+      // Super-Hero categories
+      "Marvel Heroes": "This is a Marvel superhero.",
+      "DC Heroes": "This is a DC superhero.",
+      "Disney Heroes": "This is a Disney hero.",
+      "Comic Heroes": "This is a comic book hero.",
+      "Movie Heroes": "This is a movie hero.",
+      
+      // Movie categories
+      "Animated Movies": "This is an animated movie.",
+      "Superhero Movies": "This is a movie about superheroes.",
+      "Family Movies": "This is a movie suitable for the whole family.",
+      "Action Movies": "This is an action-packed movie.",
+      "Comedy Movies": "This is a comedy movie.",
+      "Fantasy Movies": "This is a fantasy movie.",
+      "Sci-Fi Movies": "This is a science fiction movie.",
+      "Drama Movies": "This is a drama movie.",
+      "Classic Movies": "This is a classic movie.",
+      "Recent Movies": "This is a recent movie.",
+      
+      // Body parts categories
+      "Head Parts": "This is a part of the head.",
+      "Limbs": "This is a limb.",
+      "Internal Organs": "This is an internal organ.",
+      "External Body Parts": "This is an external body part.",
+      "Upper Body Parts": "This is part of the upper body.",
+      "Lower Body Parts": "This is part of the lower body.",
+      
+      // Pet categories
+      "Mammal Pets": "This is a mammal pet.",
+      "Bird Pets": "This is a bird pet.",
+      "Reptile Pets": "This is a reptile pet.",
+      "Fish Pets": "This is a fish pet.",
+      "Small Pets": "This is a small pet.",
+      "Common Pets": "This is a common pet.",
+      
+      // Clothing categories
+      "Tops": "This is worn on the upper body.",
+      "Bottoms": "This is worn on the lower body.",
+      "Accessories": "This is an accessory.",
+      "Footwear": "This is worn on the feet.",
+      "Winter Clothing": "This is worn in winter.",
+      "Summer Clothing": "This is worn in summer.",
+      
+      // Food categories
+      "Italian Food": "This is an Italian dish.",
+      "Mexican Food": "This is a Mexican dish.",
+      "Asian Food": "This is an Asian dish.",
+      "Fast Food": "This is fast food.",
+      "Desserts": "This is a dessert.",
+      "Main Courses": "This is a main course.",
+      "Side Dishes": "This is a side dish.",
+      
+      // Athlete categories
+      "Basketball Players": "This person plays basketball.",
+      "Soccer Players": "This person plays soccer.",
+      "Tennis Players": "This person plays tennis.",
+      "American Football Players": "This person plays American football.",
+      "Baseball Players": "This person plays baseball.",
+      "Golfers": "This person plays golf.",
+      "Olympic Athletes": "This is an Olympic athlete.",
+      
+      // Country categories
+      "European Countries": "This is a country in Europe.",
+      "Asian Countries": "This is a country in Asia.",
+      "North American Countries": "This is a country in North America.",
+      "South American Countries": "This is a country in South America.",
+      "African Countries": "This is a country in Africa.",
+      "Oceanian Countries": "This is a country in Oceania.",
+      
+      // Famous People categories
+      "Musicians": "This person is a musician.",
+      "Actors": "This person is an actor.",
+      "Athletes": "This person is an athlete.",
+      "Politicians": "This person is a politician.",
+      "Business People": "This person is a business leader.",
+      "Scientists": "This person is a scientist.",
+      
+      // Video Game categories
+      "Action Games": "This is an action video game.",
+      "Adventure Games": "This is an adventure video game.",
+      "Sports Games": "This is a sports video game.",
+      "Puzzle Games": "This is a puzzle video game.",
+      "Shooter Games": "This is a shooter video game.",
+      "Popular Games": "This is a popular video game.",
+      
+      // Brand categories
+      "Clothing Brands": "This is a clothing brand.",
+      "Sports Brands": "This is a sports brand.",
+      "Tech Brands": "This is a technology brand.",
+      "Food Brands": "This is a food brand.",
+      "Entertainment Brands": "This is an entertainment brand.",
+      
+      // Villain categories
+      "Comic Villains": "This is a comic book villain.",
+      "Movie Villains": "This is a movie villain.",
+      "Disney Villains": "This is a Disney villain.",
+      "Superhero Villains": "This is a superhero villain.",
+    };
+    
+    // Word to broader category mapping
+    const wordToCategories = {
       // Animals
-      "Whale": "Largest mammal in the ocean",
-      "Pelican": "Bird with a large throat pouch",
-      "Emu": "Large flightless Australian bird",
-      "Lion": "King of the jungle",
-      "Wolf": "Wild canine that howls at the moon",
-      "Shark": "Predator of the sea with sharp teeth",
-      "Bee": "Insect that makes honey",
-      "Bunny": "Small mammal with long ears",
-      "Cat": "Domestic feline pet",
-      "Bird": "Flying animal with feathers",
-      "Kangaroo": "Australian marsupial that hops",
-      "Fish": "Aquatic animal with gills and fins",
-      "Dog": "Man's best friend",
-      "Coyote": "Wild canine found in North America",
-      "Hyena": "African carnivore known for laughing sound",
-      "Otter": "Semi-aquatic mammal that uses tools",
-      "Bobcat": "North American wild cat",
-      "Dodo Bird": "Extinct flightless bird from Mauritius",
+      "Whale": ["Mammals", "Marine Animals", "Large Animals"],
+      "Pelican": ["Birds", "Marine Animals"],
+      "Emu": ["Birds", "Large Animals"],
+      "Lion": ["Mammals", "Wild Animals", "Large Animals"],
+      "Wolf": ["Mammals", "Wild Animals"],
+      "Shark": ["Fish", "Marine Animals", "Wild Animals"],
+      "Bee": ["Insects", "Small Animals"],
+      "Bunny": ["Mammals", "Small Animals", "Pets"],
+      "Cat": ["Mammals", "Pets", "Small Animals"],
+      "Bird": ["Birds", "Pets", "Small Animals"],
+      "Kangaroo": ["Mammals", "Wild Animals", "Large Animals"],
+      "Fish": ["Fish", "Pets", "Marine Animals"],
+      "Dog": ["Mammals", "Pets", "Farm Animals"],
+      "Coyote": ["Mammals", "Wild Animals"],
+      "Hyena": ["Mammals", "Wild Animals"],
+      "Otter": ["Mammals", "Marine Animals"],
+      "Bobcat": ["Mammals", "Wild Animals"],
+      "Dodo Bird": ["Birds", "Extinct Animals"],
       
       // Fruits
-      "Plum": "Small purple stone fruit",
-      "Apricot": "Small orange stone fruit",
-      "Mango": "Tropical stone fruit with orange flesh",
-      "Apple": "Red or green fruit that keeps doctors away",
-      "Pear": "Bell-shaped fruit",
-      "Watermelon": "Large green fruit with red flesh",
-      "Passionfruit": "Tropical fruit with pulpy seeds",
-      "Banana": "Yellow curved fruit",
-      "Grape": "Small fruit that grows in bunches",
-      "Pineapple": "Tropical fruit with a spiky crown",
-      "Orange": "Citrus fruit that shares its name with a color",
-      "Strawberry": "Red berry with seeds on the outside",
-      "Rasberry": "Red composite berry",
-      "Dragonfruit": "Exotic fruit with pink skin and white flesh",
+      "Plum": ["Stone Fruits", "Common Fruits"],
+      "Apricot": ["Stone Fruits", "Common Fruits"],
+      "Mango": ["Tropical Fruits", "Stone Fruits"],
+      "Apple": ["Common Fruits"],
+      "Pear": ["Common Fruits"],
+      "Watermelon": ["Common Fruits", "Large Fruits"],
+      "Passionfruit": ["Tropical Fruits", "Exotic Fruits"],
+      "Banana": ["Tropical Fruits", "Common Fruits"],
+      "Grape": ["Berries", "Common Fruits"],
+      "Pineapple": ["Tropical Fruits", "Common Fruits"],
+      "Orange": ["Citrus Fruits", "Common Fruits"],
+      "Strawberry": ["Berries", "Common Fruits"],
+      "Rasberry": ["Berries", "Common Fruits"],
+      "Dragonfruit": ["Tropical Fruits", "Exotic Fruits"],
       
       // Jobs
-      "Teacher": "Educates students in a classroom",
-      "Garbage Man": "Collects trash and waste",
-      "Singer": "Performs vocal music",
-      "Dancer": "Performs dance routines",
-      "Scientist": "Conducts research and experiments",
-      "FireFighter": "Emergency responder who fights fires",
-      "Bus Driver": "Drives a bus",
-      "Dentist": "Treats teeth and oral health",
-      "Doctor": "Medical professional who treats patients",
-      "Vet": "Animal doctor",
-      "Artist": "Creates visual or performance art",
-      "Chef": "Professional cook in a restaurant",
-      "Animator": "Creates animated films or graphics",
-      "Construction Worker": "Builds structures",
-      "Photographer": "Takes professional photographs",
-      "Logistician": "Manages supply chains and distribution",
-      "Plumber": "Works with pipes and water systems",
-      "Tax Auditor": "Examines financial records",
-      "President": "Leader of a country",
+      "Teacher": ["Education Jobs", "Service Jobs"],
+      "Garbage Man": ["Service Jobs", "Blue Collar Jobs"],
+      "Singer": ["Entertainment Jobs", "Creative Jobs"],
+      "Dancer": ["Entertainment Jobs", "Creative Jobs"],
+      "Scientist": ["Technical Jobs", "White Collar Jobs"],
+      "FireFighter": ["Public Service Jobs", "Blue Collar Jobs"],
+      "Bus Driver": ["Service Jobs", "Blue Collar Jobs"],
+      "Dentist": ["Medical Jobs", "White Collar Jobs"],
+      "Doctor": ["Medical Jobs", "White Collar Jobs"],
+      "Vet": ["Medical Jobs", "Service Jobs"],
+      "Artist": ["Creative Jobs", "Entertainment Jobs"],
+      "Chef": ["Service Jobs", "Creative Jobs"],
+      "Animator": ["Creative Jobs", "Entertainment Jobs"],
+      "Construction Worker": ["Blue Collar Jobs", "Technical Jobs"],
+      "Photographer": ["Creative Jobs", "Entertainment Jobs"],
+      "Logistician": ["Technical Jobs", "White Collar Jobs"],
+      "Plumber": ["Service Jobs", "Blue Collar Jobs"],
+      "Tax Auditor": ["Technical Jobs", "White Collar Jobs"],
+      "President": ["Public Service Jobs", "White Collar Jobs"],
       
       // Songs
-      "Baby Shark": "Children's song about a family of sharks",
-      "Twinkle Twinkle": "Nursery rhyme about a star",
-      "Happy Birthday": "Song sung on birthdays",
-      "Wheels on the Bus": "Children's song about bus parts",
-      "Let it go": "Disney song about embracing freedom",
-      "Last Christmas": "Song about a past holiday heartbreak",
-      "This Old Man": "Children's counting song",
-      "Happy": "Upbeat song about feeling joyful",
-      "Old MacDonald": "Children's song about a farm",
-      "Friday": "Song about the end of the workweek",
-      "Hockey Pokey": "Children's dance song",
-      "Jingle Bells": "Christmas song about sleigh riding",
-      "Shake it off": "Song about ignoring negativity",
-      "Baby": "Love song by Justin Bieber",
-      "Not like us": "Hip-hop diss track",
-      "Despacito": "Spanish-language hit song",
-      "Shape of you": "Song about physical attraction",
-      "Uptown Funk": "Funk song about style",
-      "Payphone": "Song about trying to reach someone",
-      "Hello": "Song about reconnecting with an ex",
-      "Dream on": "Rock song about pursuing dreams",
-      "Gods Plan": "Song about destiny",
-      "Stiches": "Song about heartbreak pain",
-      "Drivers License": "Song about driving and heartbreak",
-      "Thriller": "Halloween-themed song by Michael Jackson",
+      "Baby Shark": ["Children's Songs", "Recent Hits"],
+      "Twinkle Twinkle": ["Children's Songs", "Nursery Rhymes"],
+      "Happy Birthday": ["Classic Songs", "Common Songs"],
+      "Wheels on the Bus": ["Children's Songs", "Nursery Rhymes"],
+      "Let it go": ["Pop Songs", "Recent Hits"],
+      "Last Christmas": ["Holiday Songs", "Pop Songs"],
+      "This Old Man": ["Children's Songs", "Nursery Rhymes"],
+      "Happy": ["Pop Songs", "Recent Hits"],
+      "Old MacDonald": ["Children's Songs", "Nursery Rhymes"],
+      "Friday": ["Pop Songs", "Recent Hits"],
+      "Hockey Pokey": ["Children's Songs"],
+      "Jingle Bells": ["Holiday Songs", "Classic Songs"],
+      "Shake it off": ["Pop Songs", "Recent Hits"],
+      "Baby": ["Pop Songs", "Recent Hits"],
+      "Not like us": ["Hip Hop Songs", "Recent Hits"],
+      "Despacito": ["Pop Songs", "Recent Hits"],
+      "Shape of you": ["Pop Songs", "Recent Hits"],
+      "Uptown Funk": ["Pop Songs", "Recent Hits"],
+      "Payphone": ["Pop Songs", "Recent Hits"],
+      "Hello": ["Pop Songs", "Recent Hits"],
+      "Dream on": ["Rock Songs", "Classic Songs"],
+      "Gods Plan": ["Hip Hop Songs", "Recent Hits"],
+      "Stiches": ["Pop Songs", "Recent Hits"],
+      "Drivers License": ["Pop Songs", "Recent Hits"],
+      "Thriller": ["Pop Songs", "Classic Songs"],
       
       // Instruments
-      "Guitar": "Six-stringed instrument played by strumming",
-      "Violin": "String instrument played with a bow",
-      "Piano": "Instrument with black and white keys",
-      "Cowbell": "Percussion instrument shaped like a bell",
-      "Microphone": "Device used to amplify sound",
-      "Flute": "Woodwind instrument played by blowing",
-      "Drums": "Percussion instrument played with sticks",
-      "Recorder": "Small woodwind instrument",
-      "Keyboard": "Electronic instrument with piano-style keys",
-      "Harmonica": "Small mouth-blown instrument",
-      "Ukulele": "Small four-stringed instrument from Hawaii",
-      "Didgeridoo": "Long wooden wind instrument from Australia",
-      "The Triangle": "Percussion instrument in the shape of a triangle",
-      "Kick Drum": "Large drum played with a foot pedal",
-      "Accordion": "Instrument with bellows and keys",
+      "Guitar": ["String Instruments", "Common Instruments"],
+      "Violin": ["String Instruments", "Orchestral Instruments"],
+      "Harmonica": ["Wind Instruments", "Common Instruments"],
+      "Piano": ["String Instruments", "Common Instruments"],
+      "Ukulele": ["String Instruments", "Common Instruments"],
+      "Cowbell": ["Percussion Instruments", "Common Instruments"],
+      "Didgeridoo": ["Wind Instruments", "Exotic Instruments"],
+      "The Triangle": ["Percussion Instruments", "Orchestral Instruments"],
+      "Microphone": ["Electronic Instruments", "Common Instruments"],
+      "Flute": ["Wind Instruments", "Orchestral Instruments"],
+      "Kick Drum": ["Percussion Instruments", "Common Instruments"],
+      "Accordion": ["Wind Instruments", "Common Instruments"],
       
-      // Super Heroes
-      "Superman": "Man of steel who can fly",
-      "Batman": "Caped crusader with no superpowers",
-      "Catwoman": "Feline-themed antihero",
-      "Spiderman": "Web-slinging hero with spider powers",
-      "Hulk": "Green hero with incredible strength",
-      "Iron Man": "Genius billionaire in a powered suit",
-      "Wonder-Woman": "Amazonian princess with super strength",
-      "Wolverine": "Mutant with retractable claws",
-      "Mario": "Plumber who saves Princess Peach",
-      "Moana": "Polynesian princess who sails the ocean",
-      "Elastigirl": "Hero who can stretch her body",
-      "Elsa": "Snow queen with ice powers",
+      // Super-Heroes
+      "Superman": ["DC Heroes", "Comic Heroes", "Movie Heroes"],
+      "Batman": ["DC Heroes", "Comic Heroes", "Movie Heroes"],
+      "Catwoman": ["DC Heroes", "Comic Heroes", "Movie Heroes"],
+      "Spiderman": ["Marvel Heroes", "Comic Heroes", "Movie Heroes"],
+      "Hulk": ["Marvel Heroes", "Comic Heroes", "Movie Heroes"],
+      "Iron Man": ["Marvel Heroes", "Comic Heroes", "Movie Heroes"],
+      "Wonder-Woman": ["DC Heroes", "Comic Heroes", "Movie Heroes"],
+      "Wolverine": ["Marvel Heroes", "Comic Heroes", "Movie Heroes"],
+      "Mario": ["Video Game Heroes", "Disney Heroes"],
+      "Moana": ["Disney Heroes", "Movie Heroes"],
+      "Elastigirl": ["Disney Heroes", "Movie Heroes"],
+      "Elsa": ["Disney Heroes", "Movie Heroes"],
       
       // Movies
-      "Toy Story": "Animated film about toys that come to life",
-      "Frozen": "Disney film about two royal sisters",
-      "Moana": "Disney film about a Polynesian girl",
-      "Cinderalla": "Classic fairy tale about a girl and a glass slipper",
-      "Snow White": "Classic fairy tale about a princess and seven dwarfs",
-      "Incredibles": "Animated film about a family of superheroes",
-      "Cars": "Animated film about talking race cars",
-      "Up": "Animated film about a man who flies his house",
-      "Kung fu Panda": "Animated film about a panda who learns kung fu",
-      "Rio": "Animated film about a blue macaw",
-      "Inside Out": "Animated film about emotions inside a girl's head",
-      "Big Hero 6": "Animated film about a boy and his robot friend",
-      "Shawshank Redemption": "Film about hope and friendship in prison",
-      "Daddy's Home": "Comedy about stepdads",
-      "End Game": "Superhero film about the final battle",
-      "Titanic": "Romance film about a doomed ship",
-      "Charlotte's Web": "Film about a spider who saves a pig",
-      "Fast and Furious": "Action film about street racing",
-      "BIG": "Comedy about a boy who becomes an adult overnight",
+      "Toy Story": ["Animated Movies", "Family Movies", "Classic Movies"],
+      "Frozen": ["Animated Movies", "Family Movies", "Recent Movies"],
+      "Moana": ["Animated Movies", "Family Movies", "Recent Movies"],
+      "Cinderalla": ["Animated Movies", "Family Movies", "Classic Movies"],
+      "Snow White": ["Animated Movies", "Family Movies", "Classic Movies"],
+      "Incredibles": ["Animated Movies", "Family Movies", "Superhero Movies"],
+      "Cars": ["Animated Movies", "Family Movies"],
+      "Up": ["Animated Movies", "Family Movies", "Recent Movies"],
+      "Kung fu Panda": ["Animated Movies", "Family Movies", "Action Movies"],
+      "Rio": ["Animated Movies", "Family Movies"],
+      "Inside Out": ["Animated Movies", "Family Movies", "Recent Movies"],
+      "Big Hero 6": ["Animated Movies", "Family Movies", "Superhero Movies"],
+      "Shawshank Redemption": ["Drama Movies", "Classic Movies"],
+      "Daddy's Home": ["Comedy Movies", "Recent Movies"],
+      "End Game": ["Superhero Movies", "Action Movies", "Recent Movies"],
+      "Titanic": ["Drama Movies", "Classic Movies"],
+      "Charlotte's Web": ["Family Movies", "Classic Movies"],
+      "Fast and Furious": ["Action Movies", "Recent Movies"],
+      "BIG": ["Comedy Movies", "Classic Movies"],
       
       // Parts of body
-      "Nose": "Facial feature used for smelling",
-      "Eye": "Organ used for seeing",
-      "Leg": "Lower limb used for walking",
-      "Arm": "Upper limb with hands",
-      "Hand": "Body part with fingers",
-      "Foot": "Lower body part with toes",
-      "Head": "Top part of the body containing the brain",
-      "Ear": "Organ used for hearing",
-      "Mouth": "Facial feature used for eating and speaking",
-      "Back": "Rear part of the torso",
-      "Hair": "Grows on the head",
-      "Fingers": "Digits on the hand",
-      "Teeth": "Used for chewing food",
-      "Toes": "Digits on the foot",
-      "Brain": "Organ in the head that controls the body",
-      "Heart": "Organ that pumps blood",
+      "Nose": ["Head Parts", "External Body Parts"],
+      "Eye": ["Head Parts", "External Body Parts"],
+      "Leg": ["Limbs", "Lower Body Parts"],
+      "Arm": ["Limbs", "Upper Body Parts"],
+      "Hand": ["Upper Body Parts", "External Body Parts"],
+      "Foot": ["Lower Body Parts", "External Body Parts"],
+      "Head": ["Head Parts", "External Body Parts"],
+      "Ear": ["Head Parts", "External Body Parts"],
+      "Mouth": ["Head Parts", "External Body Parts"],
+      "Back": ["Upper Body Parts", "External Body Parts"],
+      "Hair": ["Head Parts", "External Body Parts"],
+      "Fingers": ["Upper Body Parts", "External Body Parts"],
+      "Teeth": ["Head Parts", "External Body Parts"],
+      "Toes": ["Lower Body Parts", "External Body Parts"],
+      "Brain": ["Head Parts", "Internal Organs"],
+      "Heart": ["Internal Organs", "Upper Body Parts"],
       
       // Pets
-      "Dog": "Man's best friend",
-      "Cat": "Domestic feline pet",
-      "Fish": "Aquatic pet that swims in a tank",
-      "Rabbit": "Small mammal with long ears",
-      "Hamster": "Small rodent often kept in a cage",
-      "Bird": "Feathered pet that can fly",
-      "Turtle": "Reptile with a shell",
-      "Guinea Pig": "Small rodent from South America",
-      "Frog": "Amphibian known for jumping",
-      "Lizard": "Reptile with scaly skin",
+      "Dog": ["Mammal Pets", "Common Pets"],
+      "Cat": ["Mammal Pets", "Common Pets", "Small Pets"],
+      "Fish": ["Fish Pets", "Common Pets", "Small Pets"],
+      "Rabbit": ["Mammal Pets", "Small Pets"],
+      "Hamster": ["Mammal Pets", "Small Pets"],
+      "Bird": ["Bird Pets", "Common Pets", "Small Pets"],
+      "Turtle": ["Reptile Pets", "Small Pets"],
+      "Guinea Pig": ["Mammal Pets", "Small Pets"],
+      "Frog": ["Small Pets"],
+      "Lizard": ["Reptile Pets", "Small Pets"],
       
       // Clothing
-      "Shirt": "Garment worn on the upper body",
-      "Pants": "Garment worn on the lower body",
-      "Hat": "Head covering",
-      "Jacket": "Outer garment worn for warmth",
-      "Socks": "Coverings for the feet",
-      "Shoes": "Footwear",
-      "Gloves": "Coverings for the hands",
-      "Scarf": "Neck covering",
-      "Dress": "One-piece garment for women",
-      "Shorts": "Short trousers"
+      "Shirt": ["Tops", "Common Clothing"],
+      "Pants": ["Bottoms", "Common Clothing"],
+      "Hat": ["Accessories", "Common Clothing"],
+      "Jacket": ["Tops", "Winter Clothing"],
+      "Socks": ["Footwear", "Common Clothing"],
+      "Shoes": ["Footwear", "Common Clothing"],
+      "Gloves": ["Accessories", "Winter Clothing"],
+      "Scarf": ["Accessories", "Winter Clothing"],
+      "Dress": ["Tops", "Common Clothing"],
+      "Shorts": ["Bottoms", "Summer Clothing"],
+      
+      // Foods
+      "Spaghetti Bolognese": ["Italian Food", "Main Courses"],
+      "Taco": ["Mexican Food", "Main Courses"],
+      "Risotto": ["Italian Food", "Main Courses"],
+      "Steak": ["Main Courses", "Common Food"],
+      "Jelly": ["Desserts", "Common Food"],
+      "Jollof Rice": ["African Food", "Main Courses"],
+      "Egg Fried Rice": ["Asian Food", "Main Courses"],
+      "Sushi": ["Asian Food", "Main Courses"],
+      "Pork": ["Main Courses", "Common Food"],
+      "Ribs": ["Main Courses", "Common Food"],
+      "Ratatouille": ["French Food", "Main Courses"],
+      "Chicken Noodle Soup": ["Common Food", "Main Courses"],
+      "Massaman Beef Curry": ["Asian Food", "Main Courses"],
+      
+      // Athletes
+      "Luka Doncic": ["Basketball Players", "Recent Athletes"],
+      "Steph Curry": ["Basketball Players", "Recent Athletes"],
+      "Klay Thompson": ["Basketball Players", "Recent Athletes"],
+      "Tiger Woods": ["Golfers", "Famous Athletes"],
+      "Ronaldo": ["Soccer Players", "Famous Athletes"],
+      "Kawhi Leonard": ["Basketball Players", "Recent Athletes"],
+      "Messi": ["Soccer Players", "Famous Athletes"],
+      "Travis Kelce": ["American Football Players", "Recent Athletes"],
+      "Kylian Mbappe": ["Soccer Players", "Recent Athletes"],
+      "Caitlin Clark": ["Basketball Players", "Recent Athletes"],
+      "Angel Reese": ["Basketball Players", "Recent Athletes"],
+      "Rory Mcilroy": ["Golfers", "Recent Athletes"],
+      
+      // Countries
+      "Slovenia": ["European Countries"],
+      "Moldova": ["European Countries"],
+      "Bhutan": ["Asian Countries"],
+      "New Zealand": ["Oceanian Countries"],
+      "USA": ["North American Countries"],
+      "Argentina": ["South American Countries"],
+      "Mexico": ["North American Countries"],
+      "Brazil": ["South American Countries"],
+      "Comoros": ["African Countries"],
+      "France": ["European Countries"],
+      "Germany": ["European Countries"],
+      "Canada": ["North American Countries"],
+      
+      // Famous People
+      "Michael Jackson": ["Musicians", "Famous People"],
+      "Timothee Chalamet": ["Actors", "Famous People"],
+      "Ariana Grande": ["Musicians", "Famous People"],
+      "Lebron James": ["Athletes", "Basketball Players"],
+      "Chris Pratt": ["Actors", "Famous People"],
+      "Jim Carrey": ["Actors", "Comedians", "Famous People"],
+      "Chris Rock": ["Actors", "Comedians", "Famous People"],
+      "Elon Musk": ["Business People", "Famous People"],
+      "The Rock": ["Actors", "Athletes", "Famous People"],
+      "John Cena": ["Actors", "Wrestlers", "Famous People"],
+      "Martin Luther King": ["Politicians", "Famous People"],
+      "Kanye West": ["Musicians", "Famous People"],
+      
+      // Video Games
+      "Fortnite": ["Action Games", "Popular Games", "Shooter Games"],
+      "Minecraft": ["Adventure Games", "Popular Games", "Puzzle Games"],
+      "Call of Duty": ["Action Games", "Popular Games", "Shooter Games"],
+      "Tertis": ["Puzzle Games", "Classic Games", "Popular Games"],
+      "Among Us": ["Popular Games", "Recent Games"],
+      "Halo": ["Action Games", "Shooter Games", "Popular Games"],
+      "Fall Guys": ["Popular Games", "Recent Games", "Puzzle Games"],
+      "Fifa": ["Sports Games", "Popular Games"],
+      "NBA 2K": ["Sports Games", "Popular Games"],
+      "Pac-Man": ["Classic Games", "Popular Games", "Arcade Games"],
+      "Battle Front": ["Action Games", "Shooter Games", "Popular Games"],
+      
+      // Brands
+      "Nike": ["Clothing Brands", "Sports Brands", "Popular Brands"],
+      "Team 10": ["Entertainment Brands"],
+      "Vans": ["Clothing Brands", "Sports Brands"],
+      "Reebok": ["Clothing Brands", "Sports Brands"],
+      "Fifa": ["Sports Brands", "Entertainment Brands"],
+      "Google": ["Tech Brands", "Popular Brands"],
+      "Apple": ["Tech Brands", "Popular Brands"],
+      "Adidas": ["Clothing Brands", "Sports Brands", "Popular Brands"],
+      "Victoria's Secret": ["Clothing Brands", "Popular Brands"],
+      "McDonald's": ["Food Brands", "Popular Brands"],
+      "Faze": ["Entertainment Brands"],
+      "Hype House": ["Entertainment Brands"],
+      "Bop House": ["Entertainment Brands"],
+      
+      // Villains
+      "Joker": ["Comic Villains", "Movie Villains", "DC Villains"],
+      "Uma": ["Movie Villains", "Disney Villains"],
+      "Thanos": ["Comic Villains", "Movie Villains", "Marvel Villains"],
+      "Harely Quinn": ["Comic Villains", "Movie Villains", "DC Villains"],
+      "Bane": ["Comic Villains", "Movie Villains", "DC Villains"],
+      "Green Goblen": ["Comic Villains", "Movie Villains", "Marvel Villains"],
+      "Lex Luther": ["Comic Villains", "Movie Villains", "DC Villains"],
+      "Mysterio": ["Comic Villains", "Movie Villains", "Marvel Villains"],
+      "Prowler": ["Comic Villains", "Movie Villains", "Marvel Villains"],
+      "King Pin": ["Comic Villains", "Movie Villains", "Marvel Villains"],
+      "Omni Man": ["Comic Villains", "Superhero Villains"],
+      "Loki": ["Comic Villains", "Movie Villains", "Marvel Villains"],
+      "Darth Vader": ["Movie Villains", "Superhero Villains"],
+      "Voldemort": ["Movie Villains", "Book Villains"],
+      "Ghost Face": ["Movie Villains", "Horror Villains"],
+      "Chucky": ["Movie Villains", "Horror Villains"],
+      "PennyWise": ["Movie Villains", "Horror Villains", "Book Villains"],
     };
+    
+    // Default to easy
+    let currentWordCategories = easyWordCategories;
     
     // Role definitions with enhanced descriptions
     const roles = {
@@ -1346,6 +1678,7 @@
       document.getElementById('gameScreen').style.display = 'none';
       document.getElementById('passDeviceScreen').style.display = 'none';
       document.getElementById('winScreen').style.display = 'none';
+      document.getElementById('deadRevealScreen').style.display = 'none';
       
       // Update form elements to reflect saved settings
       document.getElementById('playerCount').value = savedSettings.playerCount;
@@ -1418,7 +1751,8 @@
       const currentImposterCount = parseInt(imposterSelect.value);
       
       imposterSelect.innerHTML = '';
-      const maxImposters = Math.floor(playerCount / 3);
+      // Changed from Math.floor(playerCount / 3) to allow more imposters
+      const maxImposters = Math.min(3, Math.floor(playerCount / 2));
       
       for (let i = 1; i <= maxImposters; i++) {
         const option = document.createElement('option');
@@ -1574,10 +1908,20 @@
       const playerIndices = [...Array(gameState.gameSettings.playerCount).keys()];
       shuffleArray(playerIndices);
       
-      // Assign imposter roles
+      // Assign imposter roles and track who they are
+      const imposterIds = [];
       for (let i = 0; i < gameState.gameSettings.imposterCount; i++) {
         gameState.players[playerIndices[i]].role = 'imposter';
+        imposterIds.push(playerIndices[i] + 1); // +1 because player IDs are 1-indexed
       }
+      
+      // Let imposters know who each other are
+      gameState.players.forEach(player => {
+        if (player.role === 'imposter') {
+          // Store IDs of other imposters
+          player.specialData.imposters = imposterIds.filter(id => id !== player.id);
+        }
+      });
       
       // Assign special roles
       let specialRoleIndex = gameState.gameSettings.imposterCount;
@@ -1635,8 +1979,16 @@
             }
             break;
           case 'hinter':
-            // Generate a hint for the word
-            player.specialData.hint = wordHints[gameState.currentWord] || "No hint available for this word";
+            // Get broader categories for the word
+            const wordCategories = wordToCategories[gameState.currentWord] || [];
+            if (wordCategories.length > 0) {
+              // Randomly select one of the broader categories
+              const randomCategory = wordCategories[Math.floor(Math.random() * wordCategories.length)];
+              player.specialData.hint = broadHints[randomCategory] || "This word belongs to a specific category.";
+            } else {
+              // Fallback hint if no category is found
+              player.specialData.hint = "This word belongs to a specific category.";
+            }
             break;
         }
       });
@@ -1715,6 +2067,11 @@
       document.getElementById('roleName').className = `role-name ${player.role}`;
       
       let description = roleData.description;
+      
+      // Show imposter teammates if any
+      if (player.role === 'imposter' && player.specialData.imposters && player.specialData.imposters.length > 0) {
+        description += `<br><strong>Your fellow imposters:</strong> Player ${player.specialData.imposters.join(', ')}`;
+      }
       
       // Add special information for certain roles
       if (player.role === 'executioner' && player.specialData.target) {
@@ -2001,6 +2358,13 @@
       // Show voting container
       document.getElementById('votingContainer').classList.remove('hidden');
       
+      // Show "For the dead" button if there are eliminated players
+      if (gameState.eliminatedPlayers.length > 0) {
+        document.getElementById('deadRevealBtn').style.display = 'inline-block';
+      } else {
+        document.getElementById('deadRevealBtn').style.display = 'none';
+      }
+      
       setupVotingGrid();
       updatePlayerStatus();
       
@@ -2233,6 +2597,55 @@
       winScreen.style.display = 'flex';
     }
     
+    // Dead Reveal Functions
+    function showDeadReveal() {
+      const deadRevealScreen = document.getElementById('deadRevealScreen');
+      const deadRevealWord = document.getElementById('deadRevealWord');
+      const deadRevealRoles = document.getElementById('deadRevealRoles');
+      
+      // Show the secret word
+      deadRevealWord.textContent = `Secret Word: ${gameState.currentWord}`;
+      
+      // Show all player roles
+      deadRevealRoles.innerHTML = '<h3 style="margin-bottom: 15px;">All Player Roles:</h3>';
+      
+      gameState.players.forEach(player => {
+        const roleItem = document.createElement('div');
+        roleItem.className = 'dead-player-role';
+        
+        if (player.role === 'imposter' || player.role === 'shapeshifter' || player.role === 'silencer' ||
+            player.role === 'hinter' || player.role === 'saboteur') {
+          roleItem.classList.add('imposter');
+        }
+        
+        const playerName = document.createElement('span');
+        playerName.textContent = `Player ${player.id}`;
+        playerName.style.fontWeight = '600';
+        
+        const playerRole = document.createElement('span');
+        playerRole.textContent = roles[player.role].name;
+        playerRole.style.fontWeight = '700';
+        playerRole.className = `role-name ${player.role}`;
+        
+        const playerStatus = document.createElement('span');
+        playerStatus.textContent = player.alive ? '✅ Alive' : '💀 Eliminated';
+        playerStatus.style.fontSize = '0.9rem';
+        
+        roleItem.appendChild(playerName);
+        roleItem.appendChild(playerRole);
+        roleItem.appendChild(playerStatus);
+        
+        deadRevealRoles.appendChild(roleItem);
+      });
+      
+      deadRevealScreen.style.display = 'flex';
+      playSound('phaseChange');
+    }
+    
+    function closeDeadReveal() {
+      document.getElementById('deadRevealScreen').style.display = 'none';
+    }
+    
     // Timer Functions
     function startTimer() {
       if (gameState.timer) {
@@ -2314,6 +2727,7 @@
       document.getElementById('setupScreen').style.display = 'block';
       document.getElementById('gameScreen').style.display = 'none';
       document.getElementById('passDeviceScreen').style.display = 'none';
+      document.getElementById('deadRevealScreen').style.display = 'none';
       
       showNotification('Ready for a new game with the same settings!', 'success');
     }
@@ -2349,6 +2763,7 @@
       document.getElementById('setupScreen').style.display = 'block';
       document.getElementById('gameScreen').style.display = 'none';
       document.getElementById('passDeviceScreen').style.display = 'none';
+      document.getElementById('deadRevealScreen').style.display = 'none';
       
       // Clear any notifications
       clearNotifications();
@@ -2459,4 +2874,3 @@
   </script>
 </body>
 </html>
-
